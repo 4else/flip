@@ -9,16 +9,15 @@ function lib.split(s, sep,    t,notsep)
   return t
 end
 
-function lib.o(t,    indent, depth   )
+function lib.o(t,    indent  )
   indent = indent or 0
-  depth  = depth or 7
-  if depth > 0 then
+  if indent < 10 then
     for k, v in pairs(t) do
       if not (type(k)=='string' and k:match("^_")) then
         local fmt = string.rep("|  ", indent) .. k .. ": "
         if type(v) == "table" then
           print(fmt)
-          lib.o(v, indent+1,depth-1)
+          lib.o(v, indent+1)
         else
           print(fmt .. tostring(v)) end end end end
 end
@@ -39,10 +38,9 @@ function lib.csv(file,f,f1)
 end
 
 function lib:dump(t)
-   if type(t) ~== 'table' then return tostring(o) end
+   if type(t) ~= 'table' then return tostring(o) end
    local s = '{ '
    for k,v in pairs(t) do
-     if type(k) ~= 'number' then k = '"'..k..'"' end
      s = s ..k..' = ' .. lib.dump(v) .. ','
    end
    return s .. '} '
