@@ -8,7 +8,7 @@
 Tim Menzies
 <<a href="mailto:timm@ieee.org">timm&commat;ieee.org</a>>
 <br>
-[<img width=900 src="https://github.com/timm/silon/raw/master/etc/img/flip.png">](http://git.io/silon)<br>
+[<img width=900 src="https://github.com/duo101/flip/raw/master/etc/img/flip.png">](http://git.io/silon)<br>
 
 
 # Silon
