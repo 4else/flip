@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ml.lua</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>ml.lua</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="col.html">
+                    ./src/col.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="data.html">
+                    ./src/data.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="flip.html">
+                    ./src/flip.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="lib.html">
+                    ./src/lib.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ml.html">
+                    ./src/ml.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="num.html">
+                    ./src/num.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="row.html">
+                    ./src/row.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="sym.html">
+                    ./src/sym.lua
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>Microlight - a very compact Lua utilities module</p>
+<p>Steve Donovan, 2012; License MIT
+@module ml</p>
+
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">local</span> ml = {}
+<span class="hljs-keyword">local</span> <span class="hljs-built_in">select</span>,<span class="hljs-built_in">pairs</span> = <span class="hljs-built_in">select</span>,<span class="hljs-built_in">pairs</span>
+<span class="hljs-keyword">local</span> function_arg
+
+<span class="hljs-built_in">table</span>.<span class="hljs-built_in">unpack</span> = <span class="hljs-built_in">table</span>.<span class="hljs-built_in">unpack</span> <span class="hljs-keyword">or</span> <span class="hljs-built_in">unpack</span></pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>String utilties.
+@section string</p>
+<hr>
+
+        
+      
+        
+        
+        
+      
+        
+        <ul>
+<li>split a delimited string into an array of strings.
+@param s The input string
+@param re A Lua string pattern; defaults to ‘%s+’
+@param n optional maximum number of splits
+@return an array of strings</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.split</span><span class="hljs-params">(s,re,n)</span></span>
+    <span class="hljs-keyword">local</span> <span class="hljs-built_in">find</span>,<span class="hljs-built_in">sub</span>,append = <span class="hljs-built_in">string</span>.<span class="hljs-built_in">find</span>, <span class="hljs-built_in">string</span>.<span class="hljs-built_in">sub</span>, <span class="hljs-built_in">table</span>.<span class="hljs-built_in">insert</span>
+    <span class="hljs-keyword">local</span> i1,ls = <span class="hljs-number">1</span>,{}
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> re <span class="hljs-keyword">then</span> re = <span class="hljs-string">'%s+'</span> <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">if</span> re == <span class="hljs-string">''</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> {s} <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">local</span> i2,i3 = <span class="hljs-built_in">find</span>(s,re,i1)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> i2 <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">local</span> last = <span class="hljs-built_in">sub</span>(s,i1)
+            <span class="hljs-keyword">if</span> last ~= <span class="hljs-string">''</span> <span class="hljs-keyword">then</span> append(ls,last) <span class="hljs-keyword">end</span>
+            <span class="hljs-keyword">if</span> #ls == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> ls[<span class="hljs-number">1</span>] == <span class="hljs-string">''</span> <span class="hljs-keyword">then</span>
+                <span class="hljs-keyword">return</span> {}
+            <span class="hljs-keyword">else</span>
+                <span class="hljs-keyword">return</span> ls
+            <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">end</span>
+        append(ls,<span class="hljs-built_in">sub</span>(s,i1,i2<span class="hljs-number">-1</span>))
+        <span class="hljs-keyword">if</span> n <span class="hljs-keyword">and</span> #ls == n <span class="hljs-keyword">then</span>
+            ls[#ls] = <span class="hljs-built_in">sub</span>(s,i1)
+            <span class="hljs-keyword">return</span> ls
+        <span class="hljs-keyword">end</span>
+        i1 = i3+<span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+ml.lua51 = <span class="hljs-built_in">_VERSION</span>:<span class="hljs-built_in">match</span> <span class="hljs-string">'5%.1$'</span></pre></div>
+        
+      
+        
+        <ul>
+<li>escape any ‘magic’ pattern characters in a string.
+Useful for functions like <code>string.gsub</code> and <code>string.match</code> which
+always work with Lua string patterns.
+For any s, <code>s:match(&#39;^&#39;..escape(s)..&#39;$&#39;) == s</code> is <code>true</code>.
+@param s The input string
+@return an escaped string</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.escape</span><span class="hljs-params">(s)</span></span>
+    <span class="hljs-keyword">local</span> res = s:<span class="hljs-built_in">gsub</span>(<span class="hljs-string">'[%-%.%+%[%]%(%)%$%^%%%?%*]'</span>,<span class="hljs-string">'%%%1'</span>)
+    <span class="hljs-keyword">if</span> ml.lua51 <span class="hljs-keyword">then</span>
+        res = res:<span class="hljs-built_in">gsub</span>(<span class="hljs-string">'%z'</span>,<span class="hljs-string">'%%z'</span>)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>expand a string containing any <code>${var}</code> or <code>$var</code>.
+Substitution values should be only numbers or strings.
+However, you should pick <em>either one</em> consistently!
+@param s the string
+@param subst either a table or a function (as in <code>string.gsub</code>)
+@return expanded string</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.expand</span> <span class="hljs-params">(s,subst)</span></span>
+    <span class="hljs-keyword">local</span> res,k = s:<span class="hljs-built_in">gsub</span>(<span class="hljs-string">'%${([%w_]+)}'</span>,subst)
+    <span class="hljs-keyword">if</span> k &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> res <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> (res:<span class="hljs-built_in">gsub</span>(<span class="hljs-string">'%$([%w_]+)'</span>,subst))
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>return the contents of a file as a string
+@param filename The file path
+@param is_bin open in binary mode, default false
+@return file contents, or nil,error</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.readfile</span><span class="hljs-params">(filename,is_bin)</span></span>
+    <span class="hljs-keyword">local</span> mode = is_bin <span class="hljs-keyword">and</span> <span class="hljs-string">'b'</span> <span class="hljs-keyword">or</span> <span class="hljs-string">''</span>
+    <span class="hljs-keyword">local</span> f,err = <span class="hljs-built_in">io</span>.<span class="hljs-built_in">open</span>(filename,<span class="hljs-string">'r'</span>..mode)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> f <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>,err <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">local</span> res,err = f:<span class="hljs-built_in">read</span>(<span class="hljs-string">'*a'</span>)
+    f:<span class="hljs-built_in">close</span>()
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> res <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>,err <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>write a string to a file,
+@param filename The file path
+@param str The string
+@param is_bin open in binary mode, default false
+@return true or nil,error</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.writefile</span><span class="hljs-params">(filename,str,is_bin)</span></span>
+    <span class="hljs-keyword">local</span> f,err = <span class="hljs-built_in">io</span>.<span class="hljs-built_in">open</span>(filename,<span class="hljs-string">'w'</span>..(is_bin <span class="hljs-keyword">or</span> <span class="hljs-string">''</span>))
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> f <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>,err <span class="hljs-keyword">end</span>
+    f:<span class="hljs-built_in">write</span>(str)
+    f:<span class="hljs-built_in">close</span>()
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>File and Path functions
+@section file</p>
+<hr>
+
+        
+      
+        
+        
+        
+      
+        
+        <ul>
+<li>Does a file exist?
+@param filename a file path
+@return the file path, otherwise nil
+@usage file = exists ‘readme’ or exists ‘readme.txt’ or exists ‘readme.md’</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.exists</span> <span class="hljs-params">(filename)</span></span>
+    <span class="hljs-keyword">local</span> f = <span class="hljs-built_in">io</span>.<span class="hljs-built_in">open</span>(filename)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> f <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>
+    <span class="hljs-keyword">else</span>
+        f:<span class="hljs-built_in">close</span>()
+        <span class="hljs-keyword">return</span> filename
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> sep, other_sep = <span class="hljs-built_in">package</span>.<span class="hljs-built_in">config</span>:<span class="hljs-built_in">sub</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>),<span class="hljs-string">'/'</span></pre></div>
+        
+      
+        
+        <ul>
+<li>split a path into directory and file part.
+if there’s no directory part, the first value will be the empty string.
+Handles both forward and back-slashes on Windows.
+@param P A file path
+@return the directory part
+@return the file part</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.splitpath</span><span class="hljs-params">(P)</span></span>
+    <span class="hljs-keyword">local</span> i = #P
+    <span class="hljs-keyword">local</span> ch = P:<span class="hljs-built_in">sub</span>(i,i)
+    <span class="hljs-keyword">while</span> i &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> ch ~= sep <span class="hljs-keyword">and</span> ch ~= other_sep <span class="hljs-keyword">do</span>
+        i = i - <span class="hljs-number">1</span>
+        ch = P:<span class="hljs-built_in">sub</span>(i,i)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span> <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>,P
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> P:<span class="hljs-built_in">sub</span>(<span class="hljs-number">1</span>,i<span class="hljs-number">-1</span>), P:<span class="hljs-built_in">sub</span>(i+<span class="hljs-number">1</span>)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>split a path into root and extension part.
+if there’s no extension part, the second value will be empty
+@param P A file path
+@return the name part
+@return the extension</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.splitext</span><span class="hljs-params">(P)</span></span>
+    <span class="hljs-keyword">local</span> i = #P
+    <span class="hljs-keyword">local</span> ch = P:<span class="hljs-built_in">sub</span>(i,i)
+    <span class="hljs-keyword">while</span> i &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> ch ~= <span class="hljs-string">'.'</span> <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> ch == sep <span class="hljs-keyword">or</span> ch == other_sep <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">return</span> P,<span class="hljs-string">''</span>
+        <span class="hljs-keyword">end</span>
+        i = i - <span class="hljs-number">1</span>
+        ch = P:<span class="hljs-built_in">sub</span>(i,i)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">if</span> i == <span class="hljs-number">0</span> <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">return</span> P,<span class="hljs-string">''</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> P:<span class="hljs-built_in">sub</span>(<span class="hljs-number">1</span>,i<span class="hljs-number">-1</span>),P:<span class="hljs-built_in">sub</span>(i)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>Extended table functions.
+‘array’ here is shorthand for ‘array-like table’; these functions
+only operate over the numeric <code>1..#t</code> range of a table and are
+particularly efficient for this purpose.
+@section table</p>
+<hr>
+
+        
+      
+        
+        
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">local</span> <span class="hljs-built_in">tostring</span> = <span class="hljs-built_in">tostring</span> <span class="hljs-comment">-- so we can globally override tostring!</span>
+
+<span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">quote</span> <span class="hljs-params">(v)</span></span>
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(v) == <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">return</span> (<span class="hljs-string">'%q'</span>):<span class="hljs-built_in">format</span>(v)
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">tostring</span>(v)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> lua_keyword = {
+    [<span class="hljs-string">"and"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"break"</span>] = <span class="hljs-literal">true</span>,  [<span class="hljs-string">"do"</span>] = <span class="hljs-literal">true</span>,
+    [<span class="hljs-string">"else"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"elseif"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"end"</span>] = <span class="hljs-literal">true</span>,
+    [<span class="hljs-string">"false"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"for"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"function"</span>] = <span class="hljs-literal">true</span>,
+    [<span class="hljs-string">"if"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"in"</span>] = <span class="hljs-literal">true</span>,  [<span class="hljs-string">"local"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"nil"</span>] = <span class="hljs-literal">true</span>,
+    [<span class="hljs-string">"not"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"or"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"repeat"</span>] = <span class="hljs-literal">true</span>,
+    [<span class="hljs-string">"return"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"then"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"true"</span>] = <span class="hljs-literal">true</span>,
+    [<span class="hljs-string">"until"</span>] = <span class="hljs-literal">true</span>,  [<span class="hljs-string">"while"</span>] = <span class="hljs-literal">true</span>, [<span class="hljs-string">"goto"</span>] = <span class="hljs-literal">true</span>,
+}
+
+<span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">is_iden</span> <span class="hljs-params">(key)</span></span>
+    <span class="hljs-keyword">return</span> key:<span class="hljs-built_in">match</span> <span class="hljs-string">'^[%a_][%w_]*$'</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> lua_keyword[key]
+<span class="hljs-keyword">end</span>
+
+
+<span class="hljs-keyword">local</span> tbuff
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tbuff</span> <span class="hljs-params">(t,buff,k,start_indent,indent)</span></span>
+    <span class="hljs-keyword">local</span> start_indent2, indent2
+    <span class="hljs-keyword">if</span> start_indent <span class="hljs-keyword">then</span>
+        start_indent2 = indent
+        indent2 = indent .. indent
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">append</span> <span class="hljs-params">(v)</span></span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> v <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-keyword">end</span>
+        buff[k] = v
+        k = k + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">put_item</span><span class="hljs-params">(value)</span></span>
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(value) == <span class="hljs-string">'table'</span> <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> buff.tables[value] <span class="hljs-keyword">then</span>
+                buff.tables[value] = <span class="hljs-literal">true</span>
+                k = tbuff(value,buff,k,start_indent2,indent2)
+            <span class="hljs-keyword">else</span>
+                append(<span class="hljs-string">"&lt;cycle&gt;"</span>)
+            <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">else</span>
+            value = quote(value)
+            append(value)
+        <span class="hljs-keyword">end</span>
+        append <span class="hljs-string">","</span>
+        <span class="hljs-keyword">if</span> start_indent <span class="hljs-keyword">then</span> append <span class="hljs-string">'\n'</span> <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    append <span class="hljs-string">"{"</span>
+    <span class="hljs-keyword">if</span> start_indent <span class="hljs-keyword">then</span> append <span class="hljs-string">'\n'</span> <span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <p>array part ——-</p>
+
+        
+          <div class='highlight'><pre>    <span class="hljs-keyword">local</span> array = {}
+    <span class="hljs-keyword">for</span> i,value <span class="hljs-keyword">in</span> <span class="hljs-built_in">ipairs</span>(t) <span class="hljs-keyword">do</span>
+        append(indent)
+        put_item(value)
+        array[i] = <span class="hljs-literal">true</span>
+    <span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <p>‘map’ part ——</p>
+
+        
+          <div class='highlight'><pre>    <span class="hljs-keyword">for</span> key,value <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(t) <span class="hljs-keyword">do</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> array[key] <span class="hljs-keyword">then</span>
+        append(indent)</pre></div>
+        
+      
+        
+        <p>non-identifiers need [“key”]</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(key)~=<span class="hljs-string">'string'</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> is_iden(key) <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(key)==<span class="hljs-string">'table'</span> <span class="hljs-keyword">then</span>
+                key = ml.tstring(key)
+            <span class="hljs-keyword">else</span>
+                key = quote(key)
+            <span class="hljs-keyword">end</span>
+            key = <span class="hljs-string">"["</span>..key..<span class="hljs-string">"]"</span>
+        <span class="hljs-keyword">end</span>
+        append(key..<span class="hljs-string">'='</span>)
+        put_item(value)
+    <span class="hljs-keyword">end</span> <span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <p>removing trailing comma is done for prettiness, but this implementation
+is not pretty at all!</p>
+
+        
+          <div class='highlight'><pre>    <span class="hljs-keyword">local</span> last = start_indent <span class="hljs-keyword">and</span> buff[k<span class="hljs-number">-2</span>] <span class="hljs-keyword">or</span> buff[k<span class="hljs-number">-1</span>]
+    <span class="hljs-keyword">if</span> start_indent <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">if</span> last == <span class="hljs-string">'{'</span> <span class="hljs-keyword">then</span> <span class="hljs-comment">-- empty table</span>
+            k = k - <span class="hljs-number">1</span>
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-keyword">if</span> last == <span class="hljs-string">','</span> <span class="hljs-keyword">then</span> <span class="hljs-comment">-- get rid of trailing comma</span>
+                k = k - <span class="hljs-number">2</span>
+                append <span class="hljs-string">'\n'</span>
+            <span class="hljs-keyword">end</span>
+            append(start_indent)
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">elseif</span> last == <span class="hljs-string">","</span> <span class="hljs-keyword">then</span> <span class="hljs-comment">-- get rid of trailing comma</span>
+        k = k - <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    append <span class="hljs-string">"}"</span>
+    <span class="hljs-keyword">return</span> k
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>return a string representation of a Lua value.
+Cycles are detected, and the result can be optionally indented nicely.
+@param t the table
+@param how (optional) a table with fields `spacing’ and ‘indent’, or a string corresponding
+to <code>indent</code>.
+@return a string</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.tstring</span> <span class="hljs-params">(t,how)</span></span>
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(t) == <span class="hljs-string">'table'</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> (<span class="hljs-built_in">getmetatable</span>(t) <span class="hljs-keyword">and</span> <span class="hljs-built_in">getmetatable</span>(t).<span class="hljs-built_in">__tostring</span>) <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">local</span> buff = {tables={[t]=<span class="hljs-literal">true</span>}}
+        how = how <span class="hljs-keyword">or</span> {}
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(how) == <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> how = {indent = how} <span class="hljs-keyword">end</span>
+        <span class="hljs-built_in">pcall</span>(tbuff,t,buff,<span class="hljs-number">1</span>,how.spacing <span class="hljs-keyword">or</span> how.indent,how.indent)
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">table</span>.<span class="hljs-built_in">concat</span>(buff)
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> quote(t)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> append = <span class="hljs-built_in">table</span>.<span class="hljs-built_in">insert</span></pre></div>
+        
+      
+        
+        <ul>
+<li>collect a series of values from an interator.
+@param … iterator
+@return array-like table
+@usage collect(pairs(t)) is the same as keys(t)</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.collect</span> <span class="hljs-params">(...)</span></span>
+    <span class="hljs-keyword">local</span> res = {}
+    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> ... <span class="hljs-keyword">do</span> append(res,k) <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>collect from an interator up to a condition.
+If the function returns true, then collection stops.
+@param f predicate receiving (value,count)
+@param … iterator
+@return array-like table</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.collectuntil</span> <span class="hljs-params">(f,...)</span></span>
+    <span class="hljs-keyword">local</span> res,i,pred = {},<span class="hljs-number">1</span>,function_arg(f)
+    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> ... <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> pred(k,i) <span class="hljs-keyword">then</span> <span class="hljs-keyword">break</span> <span class="hljs-keyword">end</span>
+        res[i] = k
+        i = i + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>collect <code>n</code> values from an interator.
+@param n number of values to collect
+@param … iterator
+@return array-like table</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.collectn</span> <span class="hljs-params">(n,...)</span></span>
+    <span class="hljs-keyword">return</span> collectuntil(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(k,i)</span></span> <span class="hljs-keyword">return</span> i &gt; n <span class="hljs-keyword">end</span>,...)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>collect the second value from a iterator.
+If the second value is <code>nil</code>, it won’t be collected!
+@param … iterator
+@return array-like table
+@usage collect2nd(pairs{one=1,two=2}) is {1,2} or {2,1}</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.collect2nd</span> <span class="hljs-params">(...)</span></span>
+    <span class="hljs-keyword">local</span> res = {}
+    <span class="hljs-keyword">for</span> _,v <span class="hljs-keyword">in</span> ... <span class="hljs-keyword">do</span> append(res,v) <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>extend a table by mapping a function over another table.
+@param dest destination table
+@param j start index in destination
+@param nilv default value to use if function returns <code>nil</code>
+@param f the function
+@param t source table
+@param … extra arguments to function</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.mapextend</span> <span class="hljs-params">(dest,j,nilv,f,t,...)</span></span>
+    f = function_arg(f)
+    <span class="hljs-keyword">if</span> j == <span class="hljs-number">-1</span> <span class="hljs-keyword">then</span> j = #dest + <span class="hljs-number">1</span> <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#t <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">local</span> val = f(t[i],...)
+        val = val~=<span class="hljs-literal">nil</span> <span class="hljs-keyword">and</span> val <span class="hljs-keyword">or</span> nilv
+        <span class="hljs-keyword">if</span> val ~= <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span>
+            dest[j] = val
+            j = j + <span class="hljs-number">1</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> dest
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> mapextend = ml.mapextend</pre></div>
+        
+      
+        
+        <ul>
+<li>map a function over an array.
+The output must always be the same length as the input, so
+any <code>nil</code> values are mapped to <code>false</code>.
+@param f a function of one or more arguments
+@param t the array
+@param … any extra arguments to the function
+@return a new array with elements <code>f(t[i],...)</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.imap</span><span class="hljs-params">(f,t,...)</span></span>
+    <span class="hljs-keyword">return</span> mapextend({},<span class="hljs-number">1</span>,<span class="hljs-literal">false</span>,f,t,...)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>apply a function to each element of an array.
+@param f a function of one or more arguments
+@param t the array
+@param … any extra arguments to the function
+@return the transformed array</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.transform</span> <span class="hljs-params">(f,t,...)</span></span>
+    <span class="hljs-keyword">return</span> mapextend(t,<span class="hljs-number">1</span>,<span class="hljs-literal">false</span>,f,t,...)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>map a function over values from two arrays.
+Length of output is the size of the smallest array.
+@param f a function of two or more arguments
+@param t1 first array
+@param t2 second array
+@param … any extra arguments to the function
+@return a new array with elements <code>f(t1[i],t2[i],...)</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.imap2</span><span class="hljs-params">(f,t1,t2,...)</span></span>
+    f = function_arg(f)
+    <span class="hljs-keyword">local</span> res = {}
+    <span class="hljs-keyword">local</span> n = <span class="hljs-built_in">math</span>.<span class="hljs-built_in">min</span>(#t1,#t2)
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,n <span class="hljs-keyword">do</span>
+        res[i] = f(t1[i],t2[i],...) <span class="hljs-keyword">or</span> <span class="hljs-literal">false</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>map a function over an array only keeping non-<code>nil</code> values.
+@param f a function of one or more arguments
+@param t the array
+@param … any extra arguments to the function
+@return a new array with elements <code>v = f(t[i],...) such that v ~= nil</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.imapfilter</span> <span class="hljs-params">(f,t,...)</span></span>
+    <span class="hljs-keyword">return</span> mapextend({},<span class="hljs-number">1</span>,<span class="hljs-literal">nil</span>,f,t,...)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>filter an array using a predicate.
+@param t a table
+@param pred a function that must return <code>nil</code> or <code>false</code>
+to exclude a value
+@param … any extra arguments to the predicate
+@return a new array such that <code>pred(t[i])</code> evaluates as true</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.ifilter</span><span class="hljs-params">(t,pred,...)</span></span>
+    <span class="hljs-keyword">local</span> res,k = {},<span class="hljs-number">1</span>
+    pred = function_arg(pred)
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#t <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> pred(t[i],...) <span class="hljs-keyword">then</span>
+            res[k] = t[i]
+            k = k + <span class="hljs-number">1</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>find an item in an array using a predicate.
+@param t the array
+@param pred a function of at least one argument
+@param … any extra arguments
+@return the item value, or <code>nil</code>
+@usage ifind({{1,2},{4,5}},’X[1]==Y’,4) is {4,5}</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.ifind</span><span class="hljs-params">(t,pred,...)</span></span>
+    pred = function_arg(pred)
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#t <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> pred(t[i],...) <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">return</span> t[i]
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>return the index of an item in an array.
+@param t the array
+@param value item value
+@param cmp optional comparison function (default is <code>X==Y</code>)
+@return index, otherwise <code>nil</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.indexof</span> <span class="hljs-params">(t,value,cmp)</span></span>
+    <span class="hljs-keyword">if</span> cmp <span class="hljs-keyword">then</span> cmp = function_arg(cmp) <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#t <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">local</span> v = t[i]
+        <span class="hljs-keyword">if</span> cmp <span class="hljs-keyword">and</span> cmp(v,value) <span class="hljs-keyword">or</span> v == value <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">return</span> i
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">upper</span> <span class="hljs-params">(t,i2)</span></span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> i2 <span class="hljs-keyword">or</span> i2 &gt; #t <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">return</span> #t
+    <span class="hljs-keyword">elseif</span> i2 &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">return</span> #t + i2 + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> i2
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">copy_range</span> <span class="hljs-params">(dest,index,src,i1,i2)</span></span>
+    <span class="hljs-keyword">local</span> k = index
+    <span class="hljs-keyword">for</span> i = i1,i2 <span class="hljs-keyword">do</span>
+        dest[k] = src[i]
+        k = k + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> dest
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>return a slice of an array.
+Like <code>string.sub</code>, the end index may be negative.
+@param t the array
+@param i1 the start index, default 1
+@param i2 the end index, default #t
+@return an array of <code>t[i]</code> for <code>i</code> from <code>i1</code> to <code>i2</code> inclusive</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.sub</span><span class="hljs-params">(t,i1,i2)</span></span>
+    i1, i2 = i1 <span class="hljs-keyword">or</span> <span class="hljs-number">1</span>, <span class="hljs-built_in">upper</span>(t,i2)
+    <span class="hljs-keyword">return</span> copy_range({},<span class="hljs-number">1</span>,t,i1,i2)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>delete a range of values from an array.
+@param tbl the array
+@param start start index
+@param finish end index (like <code>ml.sub</code>)</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.removerange</span><span class="hljs-params">(tbl,start,finish)</span></span>
+    finish = <span class="hljs-built_in">upper</span>(tbl,finish)
+    <span class="hljs-keyword">local</span> count = finish - start + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">for</span> k=start+count,#tbl <span class="hljs-keyword">do</span> tbl[k-count]=tbl[k] <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">for</span> k=#tbl,#tbl-count+<span class="hljs-number">1</span>,<span class="hljs-number">-1</span> <span class="hljs-keyword">do</span> tbl[k]=<span class="hljs-literal">nil</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>copy values from <code>src</code> into <code>dest</code> starting at <code>index</code>.
+By default, it moves up elements of <code>dest</code> to make room.
+@param dest destination array
+@param index start index in destination
+@param src source array
+@param overwrite write over values</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.insertvalues</span><span class="hljs-params">(dest,index,src,overwrite)</span></span>
+    <span class="hljs-keyword">local</span> sz = #src
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> overwrite <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">for</span> i = #dest,index,<span class="hljs-number">-1</span> <span class="hljs-keyword">do</span> dest[i+sz] = dest[i] <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    copy_range(dest,index,src,<span class="hljs-number">1</span>,sz)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>extend an array using values from other tables.
+@{readme.md.Extracting_and_Mapping}
+@param t the array to be extended
+@param … the other arrays
+@return the extended array</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.extend</span><span class="hljs-params">(t,...)</span></span>
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,<span class="hljs-built_in">select</span>(<span class="hljs-string">'#'</span>,...) <span class="hljs-keyword">do</span>
+        ml.insertvalues(t,#t+<span class="hljs-number">1</span>,<span class="hljs-built_in">select</span>(i,...),<span class="hljs-literal">true</span>)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> t
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>make an array of indexed values.
+Generalized table indexing. Result will only contain
+values for keys that exist.
+@param t a table
+@param keys an array of keys or indices
+@return an array <code>L</code> such that <code>L[keys[i]]</code>
+@usage indexby({one=1,two=2},{‘one’,’three’}) is {1}
+@usage indexby({10,20,30,40},{2,4}) is {20,40}</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.indexby</span><span class="hljs-params">(t,keys)</span></span>
+    <span class="hljs-keyword">local</span> res = {}
+    <span class="hljs-keyword">for</span> _,v <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(keys) <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> t[v] ~= <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span>
+            append(res,t[v])
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>create an array of numbers from start to end.
+With one argument it goes <code>1..x1</code>. <code>d</code> may be a
+floating-point fraction
+@param x1 start value
+@param x2 end value
+@param d increment (default 1)
+@return array of numbers
+@usage range(2,10) is {2,3,4,5,6,7,8,9,10}
+@usage range(5) is {1,2,3,4,5}</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.range</span> <span class="hljs-params">(x1,x2,d)</span></span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> x2 <span class="hljs-keyword">then</span>
+        x2 = x1
+        x1 = <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    d = d <span class="hljs-keyword">or</span> <span class="hljs-number">1</span>
+    <span class="hljs-keyword">local</span> res,k = {},<span class="hljs-number">1</span>
+    <span class="hljs-keyword">for</span> x = x1,x2,d <span class="hljs-keyword">do</span>
+        res[k] = x
+        k = k + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <p>Bring modules or tables into ‘t<code>.
+If</code>lib<code>is a string, then it becomes the result of</code>require<code>With only one argument, the second argument is assumed to be
+the</code>ml<code>table itself.
+@param t table to be updated, or current environment
+@param lib table, module name or</code>nil` for importing ‘ml’
+@return the updated table</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.import</span><span class="hljs-params">(t,...)</span></span>
+    <span class="hljs-keyword">local</span> other</pre></div>
+        
+      
+        
+        <p>explicit table, or current environment
+this isn’t quite right - we won’t get the calling module’s _ENV
+this way. But it does prevent execution of the not-implemented setfenv.</p>
+
+        
+          <div class='highlight'><pre>    t = t <span class="hljs-keyword">or</span> <span class="hljs-built_in">_ENV</span> <span class="hljs-keyword">or</span> <span class="hljs-built_in">getfenv</span>(<span class="hljs-number">2</span>)
+    <span class="hljs-keyword">local</span> libs = {}
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">select</span>(<span class="hljs-string">'#'</span>,...)==<span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-comment">-- default is to pull in this library!</span>
+        libs[<span class="hljs-number">1</span>] = ml
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,<span class="hljs-built_in">select</span>(<span class="hljs-string">'#'</span>,...) <span class="hljs-keyword">do</span>
+            <span class="hljs-keyword">local</span> lib = <span class="hljs-built_in">select</span>(i,...)
+            <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(lib) == <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span>
+                <span class="hljs-keyword">local</span> value = <span class="hljs-built_in">_G</span>[lib]
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> value <span class="hljs-keyword">then</span> <span class="hljs-comment">-- lazy require!</span>
+                    value = <span class="hljs-built_in">require</span> (lib)</pre></div>
+        
+      
+        
+        <p>and use the module part of package for the key</p>
+
+        
+          <div class='highlight'><pre>                    lib = lib:<span class="hljs-built_in">match</span> <span class="hljs-string">'[%w_]+$'</span>
+                <span class="hljs-keyword">end</span>
+                lib = {[lib]=value}
+            <span class="hljs-keyword">end</span>
+            libs[i] = lib
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> ml.update(t,<span class="hljs-built_in">table</span>.<span class="hljs-built_in">unpack</span>(libs))
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>add the key/value pairs of arrays to the first array.
+For sets, this is their union. For the same keys,
+the values from the first table will be overwritten.
+@param t table to be updated
+@param … tables containg more pairs to be added
+@return the updated table</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.update</span> <span class="hljs-params">(t,...)</span></span>
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,<span class="hljs-built_in">select</span>(<span class="hljs-string">'#'</span>,...) <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(<span class="hljs-built_in">select</span>(i,...)) <span class="hljs-keyword">do</span>
+            t[k] = v
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> t
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>make a table from an array of keys and an array of values.
+@param t an array of keys
+@param tv an array of values
+@return a table where <code>{[t[i]]=tv[i]}</code>
+@usage makemap({‘power’,’glory’},{20,30}) is {power=20,glory=30}</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.makemap</span><span class="hljs-params">(t,tv)</span></span>
+    <span class="hljs-keyword">local</span> res = {}
+    <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#t <span class="hljs-keyword">do</span>
+        res[t[i]] = tv <span class="hljs-keyword">and</span> tv[i] <span class="hljs-keyword">or</span> i
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> res
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>make a set from an array.
+The values are the original array indices.
+@param t an array of values
+@return a table where the keys are the indices in the array.
+@usage invert{‘one’,’two’} is {one=1,two=2}
+@function ml.invert</li>
+</ul>
+
+        
+          <div class='highlight'><pre>ml.invert = ml.makemap</pre></div>
+        
+      
+        
+        <ul>
+<li>extract the keys of a table as an array.
+@param t a table
+@return an array of keys</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.keys</span><span class="hljs-params">(t)</span></span>
+    <span class="hljs-keyword">return</span> ml.collect(<span class="hljs-built_in">pairs</span>(t))
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>are all the values of <code>other</code> in <code>t</code>?
+@param t a set
+@param other a possible subset
+@treturn bool</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.issubset</span><span class="hljs-params">(t,other)</span></span>
+    <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(other) <span class="hljs-keyword">do</span>
+        <span class="hljs-keyword">if</span> t[k] == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>are all the keys of <code>other</code> in <code>t</code>?
+@param t a table
+@param other another table
+@treturn bool</li>
+</ul>
+
+        
+          <div class='highlight'><pre>ml.containskeys = ml.issubset</pre></div>
+        
+      
+        
+        <ul>
+<li>return the number of keys in this table, or members in this set.
+@param t a table
+@treturn int key count</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.count</span> <span class="hljs-params">(t)</span></span>
+    <span class="hljs-keyword">local</span> count = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(t) <span class="hljs-keyword">do</span> count = count + <span class="hljs-number">1</span> <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> count
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>do these tables have the same keys?
+THis is set equality.
+@param t a table
+@param other a table
+@return true or false</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.equalkeys</span><span class="hljs-params">(t,other)</span></span>
+    <span class="hljs-keyword">return</span> ml.issubset(t,other) <span class="hljs-keyword">and</span> ml.issubset(other,t)
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>Functional helpers.
+@section function</p>
+<hr>
+
+        
+      
+        
+        
+        
+      
+        
+        <ul>
+<li>create a function which will throw an error on failure.
+@param f a function that returns nil,err if it fails
+@return an equivalent function that raises an error</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.throw</span><span class="hljs-params">(f)</span></span>
+    f = function_arg(f)
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(...)</span></span>
+        <span class="hljs-keyword">local</span> r1,r2,r3 = f(...)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> r1 <span class="hljs-keyword">then</span> <span class="hljs-built_in">error</span>(r2,<span class="hljs-number">2</span>) <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">return</span> r1,r2,r3
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>bind the value <code>v</code> to the first argument of function <code>f</code>.
+@param f a function of at least one argument
+@param v a value
+@return a function of one less argument
+@usage (bind1(string.match,’hello’)(‘^hell’) == ‘hell’</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.bind1</span><span class="hljs-params">(f,v)</span></span>
+    f = function_arg(f)
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(...)</span></span>
+        <span class="hljs-keyword">return</span> f(v,...)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>bind the value <code>v</code> to the second argument of function <code>f</code>.
+@param f a function of at least one argument
+@param v a value
+@return a function of one less argument
+@usage (bind2(string.match,’^hell’)(‘hello’) == ‘hell’</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.bind2</span><span class="hljs-params">(f,v)</span></span>
+    f = function_arg(f)
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x,...)</span></span>
+        <span class="hljs-keyword">return</span> f(x,v,...)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>compose two functions.
+For instance, <code>printf</code> can be defined as <code>compose(io.write,string.format)</code>
+@param f1 a function
+@param f2 a function
+@return <code>f1(f2(...))</code></li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.compose</span><span class="hljs-params">(f1,f2)</span></span>
+    f1 = function_arg(f1)
+    f2 = function_arg(f2)
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(...)</span></span>
+        <span class="hljs-keyword">return</span> f1(f2(...))
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>a function returning the second value of <code>f</code>
+@param f a function returning at least two values
+@return a function returning second of those values
+@usage take2(splitpath) is basename</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.take2</span> <span class="hljs-params">(f)</span></span>
+    f = function_arg(f)
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(...)</span></span>
+        <span class="hljs-keyword">local</span> _,b = f(...)
+        <span class="hljs-keyword">return</span> b
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>is the object either a function or a callable object?.
+@param obj Object to check.
+@return true if callable</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.callable</span> <span class="hljs-params">(obj)</span></span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">type</span>(obj) == <span class="hljs-string">'function'</span> <span class="hljs-keyword">or</span> <span class="hljs-built_in">getmetatable</span>(obj) <span class="hljs-keyword">and</span> <span class="hljs-built_in">getmetatable</span>(obj).<span class="hljs-built_in">__call</span>
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>create a callable from an indexable object.
+@param t a table or other indexable object.</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.map2fun</span> <span class="hljs-params">(t)</span></span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">setmetatable</span>({},{
+        <span class="hljs-built_in">__call</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj,key)</span></span> <span class="hljs-keyword">return</span> t[key] <span class="hljs-keyword">end</span>
+    })
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <ul>
+<li>create an indexable object from a callable.
+@param f a callable of one argument.</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.fun2map</span> <span class="hljs-params">(f)</span></span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">setmetatable</span>({},{
+        <span class="hljs-built_in">__index</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj,key)</span></span> <span class="hljs-keyword">return</span> f(key) <span class="hljs-keyword">end</span>;
+        <span class="hljs-built_in">__newindex</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span> <span class="hljs-built_in">error</span>(<span class="hljs-string">"not writeable!"</span>,<span class="hljs-number">2</span>) <span class="hljs-keyword">end</span>
+    })
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_string_lambda</span> <span class="hljs-params">(f)</span></span>
+    <span class="hljs-keyword">local</span> code = <span class="hljs-string">'return function(X,Y,Z) return '</span>..f..<span class="hljs-string">' end'</span>
+    <span class="hljs-keyword">local</span> chunk = <span class="hljs-built_in">assert</span>(<span class="hljs-built_in">loadstring</span>(code,<span class="hljs-string">'tmp'</span>))
+    <span class="hljs-keyword">return</span> chunk()
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> string_lambda</pre></div>
+        
+      
+        
+        <ul>
+<li>defines how we convert something to a callable.</li>
+</ul>
+<p>Currently, anything that matches @{callable} or is a <em>string lambda</em>.
+These are expressions with any of the placeholders, <code>X</code>,<code>Y</code> or <code>Z</code>
+corresponding to the first, second or third argument to the function.</p>
+<p>This can be overriden by people
+wishing to extend the idea of ‘callable’ in this library.
+@param f a callable or a string lambda.
+@return a function
+@raise error if <code>f</code> is not callable in any way, or errors in string lambda.
+@usage function_arg(‘X+Y’)(1,2) == 3</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.function_arg</span><span class="hljs-params">(f)</span></span>
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(f) == <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> string_lambda <span class="hljs-keyword">then</span>
+            string_lambda = ml.memoize(_string_lambda)
+        <span class="hljs-keyword">end</span>
+        f = string_lambda(f)
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">assert</span>(ml.callable(f),<span class="hljs-string">"expecting a function or callable object"</span>)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">return</span> f
+<span class="hljs-keyword">end</span>
+
+function_arg = ml.function_arg</pre></div>
+        
+      
+        
+        <ul>
+<li>‘memoize’ a function (cache returned value for next call).
+This is useful if you have a function which is relatively expensive,
+but you don’t know in advance what values will be required, so
+building a table upfront is wasteful/impossible.
+@param func a function of at least one argument
+@return a function with at least one argument, which is used as the key.</li>
+</ul>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.memoize</span><span class="hljs-params">(func)</span></span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">setmetatable</span>({}, {
+        <span class="hljs-built_in">__index</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(self, k, ...)</span></span>
+            <span class="hljs-keyword">local</span> v = func(k,...)
+            <span class="hljs-built_in">self</span>[k] = v
+            <span class="hljs-keyword">return</span> v
+        <span class="hljs-keyword">end</span>,
+        <span class="hljs-built_in">__call</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(self, k)</span></span> <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>[k] <span class="hljs-keyword">end</span>
+    })
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>Classes.
+@section class</p>
+<hr>
+
+        
+      
+        
+        
+        
+      
+        
+        <ul>
+<li>create a class with an optional base class.</li>
+</ul>
+<p>See  @{readme.md.Classes}
+The resulting table can be called to make a new object, which invokes
+an optional constructor named <code>_init</code>. If the base
+class has a constructor, you can call it as the <code>super()</code> method.
+Every class has a <code>_class</code> and a maybe-nil <code>_base</code> field, which can
+be accessed through the object.</p>
+<p>All metamethods are inherited.
+The class is given a function <code>Klass.classof(obj)</code>.
+@param base optional base class
+@return the callable metatable representing the class</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ml.class</span><span class="hljs-params">(base)</span></span>
+    <span class="hljs-keyword">local</span> klass, base_ctor = {}
+    <span class="hljs-keyword">if</span> base <span class="hljs-keyword">then</span>
+        ml.import(klass,base)
+        klass._base = base
+        base_ctor = <span class="hljs-built_in">rawget</span>(base,<span class="hljs-string">'_init'</span>)
+    <span class="hljs-keyword">end</span>
+    klass.<span class="hljs-built_in">__index</span> = klass
+    klass._class = klass
+    klass.classof = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj)</span></span>
+        <span class="hljs-keyword">local</span> m = <span class="hljs-built_in">getmetatable</span>(obj) <span class="hljs-comment">-- an object created by class() ?</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> m <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> m._class <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">while</span> m <span class="hljs-keyword">do</span> <span class="hljs-comment">-- follow the inheritance chain --</span>
+            <span class="hljs-keyword">if</span> m == klass <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">end</span>
+            m = <span class="hljs-built_in">rawget</span>(m,<span class="hljs-string">'_base'</span>)
+        <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-built_in">setmetatable</span>(klass,{
+        <span class="hljs-built_in">__call</span> = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(klass,...)</span></span>
+            <span class="hljs-keyword">local</span> obj = <span class="hljs-built_in">setmetatable</span>({},klass)
+            <span class="hljs-keyword">if</span> <span class="hljs-built_in">rawget</span>(klass,<span class="hljs-string">'_init'</span>) <span class="hljs-keyword">then</span>
+                klass.super = base_ctor
+                <span class="hljs-keyword">local</span> res = klass._init(obj,...) <span class="hljs-comment">-- call our constructor</span>
+                <span class="hljs-keyword">if</span> res <span class="hljs-keyword">then</span> <span class="hljs-comment">-- which can return a new self..</span>
+                    obj = <span class="hljs-built_in">setmetatable</span>(res,klass)
+                <span class="hljs-keyword">end</span>
+            <span class="hljs-keyword">elseif</span> base_ctor <span class="hljs-keyword">then</span> <span class="hljs-comment">-- call base ctor automatically</span>
+                base_ctor(obj,...)
+            <span class="hljs-keyword">end</span>
+            <span class="hljs-keyword">return</span> obj
+        <span class="hljs-keyword">end</span>
+    })
+    <span class="hljs-keyword">return</span> klass
+<span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>a simple Array class.
+@{readme.md.Array_Class}</p>
+<p><code>table</code> functions: <code>sort</code>,<code>concat</code>,<code>insert</code>,<code>remove</code>,<code>insert</code> as <code>append</code>.</p>
+<p><code>ml</code> functions: <code>ifilter</code> as <code>filter</code>,<code>imap</code> as <code>map</code>,<code>sub</code>,<code>indexby</code>,<code>range</code>,
+<code>indexof</code>,<code>ifind</code> as <code>find</code>,<code>extend</code>,<code>split</code> and <code>collect</code>.</p>
+<p>The <code>sorted</code> method returns a sorted copy.</p>
+<p>Concatenation, equality and custom tostring is defined.</p>
+<p>This implementation has covariant methods; so that methods like <code>map</code> and <code>sub</code>
+will return an object of the derived type, not <code>Array</code>
+@table Array</p>
+
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">local</span> Array
+
+<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">rawget</span>(<span class="hljs-built_in">_G</span>,<span class="hljs-string">'NO_MICROLIGHT_ARRAY'</span>) <span class="hljs-keyword">then</span>
+
+    Array = ml.class()
+
+    <span class="hljs-keyword">local</span> extend, <span class="hljs-built_in">setmetatable</span>, C = ml.extend, <span class="hljs-built_in">setmetatable</span>, ml.compose
+
+    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">set_class</span> <span class="hljs-params">(self,res)</span></span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">setmetatable</span>(res,<span class="hljs-built_in">self</span>._class)
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">awrap</span> <span class="hljs-params">(fun)</span></span>
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(self,...)</span></span> <span class="hljs-keyword">return</span> set_class(<span class="hljs-built_in">self</span>,fun(<span class="hljs-built_in">self</span>,...))  <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">awraps</span> <span class="hljs-params">(fun)</span></span>
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(self,f,...)</span></span> <span class="hljs-keyword">return</span> set_class(<span class="hljs-built_in">self</span>,fun(f,<span class="hljs-built_in">self</span>,...))  <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span></pre></div>
+        
+      
+        
+        <p>a class is just a table of functions, so we can do wholesale updates!</p>
+
+        
+          <div class='highlight'><pre>    ml.import(Array,{</pre></div>
+        
+      
+        
+        <p>straight from the table library</p>
+
+        
+          <div class='highlight'><pre>        <span class="hljs-built_in">concat</span>=<span class="hljs-built_in">table</span>.<span class="hljs-built_in">concat</span>,<span class="hljs-built_in">insert</span>=<span class="hljs-built_in">table</span>.<span class="hljs-built_in">insert</span>,<span class="hljs-built_in">remove</span>=<span class="hljs-built_in">table</span>.<span class="hljs-built_in">remove</span>,append=<span class="hljs-built_in">table</span>.<span class="hljs-built_in">insert</span>,</pre></div>
+        
+      
+        
+        <p>originals return table; these versions make the tables into arrays.</p>
+
+        
+          <div class='highlight'><pre>        filter=awrap(ml.ifilter),<span class="hljs-built_in">sub</span>=awrap(ml.<span class="hljs-built_in">sub</span>), indexby=awrap(ml.indexby),
+        map=awraps(ml.imap), map2=awraps(ml.imap2), mapfilter=awraps(ml.imapfilter),
+        range=C(Array,ml.range),split=C(Array,ml.split),collect=C(Array,ml.collect),
+        indexof=ml.indexof, <span class="hljs-built_in">find</span>=ml.ifind, extend=ml.extend
+    })</pre></div>
+        
+      
+        
+        <p>A constructor can return a <em>specific</em> object</p>
+
+        
+          <div class='highlight'><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array:_init</span><span class="hljs-params">(t)</span></span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> t <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span> <span class="hljs-keyword">end</span>  <span class="hljs-comment">-- no table, make a new one</span>
+        <span class="hljs-keyword">if</span> t._class == <span class="hljs-built_in">self</span>._class <span class="hljs-keyword">then</span>  <span class="hljs-comment">-- was already a Array: copy constructor!</span>
+            t = ml.<span class="hljs-built_in">sub</span>(t,<span class="hljs-number">1</span>)
+        <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">return</span> t
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array:sort</span><span class="hljs-params">(f)</span></span>
+        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(f) ~= <span class="hljs-string">"nil"</span> <span class="hljs-keyword">then</span> f = function_arg(f) <span class="hljs-keyword">end</span>
+        <span class="hljs-built_in">table</span>.<span class="hljs-built_in">sort</span>(<span class="hljs-built_in">self</span>,f)
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array:sorted</span><span class="hljs-params">(f)</span></span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>:<span class="hljs-built_in">sub</span>(<span class="hljs-number">1</span>):<span class="hljs-built_in">sort</span>(f)
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array:foreach</span><span class="hljs-params">(f,...)</span></span>
+        f = function_arg(f)
+        <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#<span class="hljs-built_in">self</span> <span class="hljs-keyword">do</span> f(<span class="hljs-built_in">self</span>[i],...) <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array.mappers</span> <span class="hljs-params">(klass,t)</span></span>
+        <span class="hljs-keyword">local</span> method = Array.mapfilter
+        <span class="hljs-keyword">if</span> t.__use <span class="hljs-keyword">then</span>
+            method = t.__use
+            t.__use = <span class="hljs-literal">nil</span>
+        <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">for</span> k,f <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(t) <span class="hljs-keyword">do</span>
+            klass[k] = ml.bind2(method,function_arg(f))
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array:__tostring</span><span class="hljs-params">()</span></span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'{'</span> .. <span class="hljs-built_in">self</span>:map(ml.tstring):<span class="hljs-built_in">concat</span> <span class="hljs-string">','</span> .. <span class="hljs-string">'}'</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array.__eq</span><span class="hljs-params">(l1,l2)</span></span>
+        <span class="hljs-keyword">if</span> #l1 ~= #l2 <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>,#l1 <span class="hljs-keyword">do</span>
+            <span class="hljs-keyword">if</span> l1[i] ~= l2[i] <span class="hljs-keyword">then</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Array.__concat</span> <span class="hljs-params">(l1,l2)</span></span>
+        <span class="hljs-keyword">return</span> set_class(l1,extend({},l1,l2))
+    <span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">end</span>
+
+ml.Array = Array
+
+<span class="hljs-keyword">return</span> ml</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

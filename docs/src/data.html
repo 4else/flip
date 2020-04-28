@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>data.lua</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>data.lua</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="col.html">
+                    ./src/col.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="data.html">
+                    ./src/data.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="flip.html">
+                    ./src/flip.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="lib.html">
+                    ./src/lib.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ml.html">
+                    ./src/ml.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="num.html">
+                    ./src/num.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="row.html">
+                    ./src/row.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="sym.html">
+                    ./src/sym.lua
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <hr>
+
+        
+      
+        
+        <p>Showing off Colon mode.
+If you hate @ tags, you can use colons. However, you need to specify colon
+mode explicitly -C or –colon, or <code>colon=true</code> in the config.ld. Be careful
+not to use a colon followed by a space for any other purpose!</p>
+<p>So the incantation in this case is <code>ldoc -C colon.lua</code>.</p>
+
+        
+      
+        
+        <p>module: Data</p>
+
+        
+          <div class='highlight'><pre>
+<span class="hljs-built_in">require</span> <span class="hljs-string">"flip"</span>
+<span class="hljs-keyword">local</span> lib = <span class="hljs-built_in">require</span> <span class="hljs-string">"lib"</span>
+<span class="hljs-keyword">local</span> Num = <span class="hljs-built_in">require</span> <span class="hljs-string">"Num"</span>
+<span class="hljs-keyword">local</span> Sym = <span class="hljs-built_in">require</span> <span class="hljs-string">"Sym"</span>
+
+<span class="hljs-keyword">local</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">c</span><span class="hljs-params">(s,k)</span></span> 
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">string</span>.<span class="hljs-built_in">sub</span>(s,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>) == the.ch[k] <span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> Data=class()
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:_init</span><span class="hljs-params">()</span></span> <span class="hljs-built_in">self</span>.rows,<span class="hljs-built_in">self</span>.cols = {},{} <span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:klassp</span><span class="hljs-params">(x)</span></span> <span class="hljs-keyword">return</span> c(x,<span class="hljs-string">"klass"</span>) <span class="hljs-keyword">end</span> 
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:goalp</span><span class="hljs-params">(x)</span></span>  <span class="hljs-keyword">return</span> c(x,<span class="hljs-string">"less"</span>) <span class="hljs-keyword">or</span> c(x,<span class="hljs-string">"more"</span>) <span class="hljs-keyword">end</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:nump</span><span class="hljs-params">(x)</span></span>   <span class="hljs-keyword">return</span> c(x,<span class="hljs-string">"num"</span>) <span class="hljs-keyword">or</span> <span class="hljs-built_in">self</span>:goalp(x) <span class="hljs-keyword">end</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:yp</span><span class="hljs-params">(x)</span></span>     <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>:klassp(x) <span class="hljs-keyword">or</span> <span class="hljs-built_in">self</span>:goalp(x) <span class="hljs-keyword">end</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:xp</span><span class="hljs-params">(x)</span></span>     <span class="hljs-keyword">return</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">self</span>:yp(x) <span class="hljs-keyword">end</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:symp</span><span class="hljs-params">(x)</span></span>   <span class="hljs-keyword">return</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">self</span>:nump(x) <span class="hljs-keyword">end</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:xsymp</span><span class="hljs-params">(x)</span></span>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>:xp(x) <span class="hljs-keyword">and</span> <span class="hljs-built_in">self</span>:symp(x) <span class="hljs-keyword">end</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:xnump</span><span class="hljs-params">(x)</span></span>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">self</span>:xp(x) <span class="hljs-keyword">and</span> <span class="hljs-built_in">self</span>:nump(x) <span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:p</span><span class="hljs-params">(f)</span></span> 
+  <span class="hljs-keyword">local</span> out,f = {},<span class="hljs-built_in">getmetatable</span>(<span class="hljs-built_in">self</span>)[f]
+  <span class="hljs-keyword">for</span> _,col <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(<span class="hljs-built_in">self</span>.cols) <span class="hljs-keyword">do</span> 
+    <span class="hljs-keyword">if</span> f(<span class="hljs-built_in">self</span>,col.txt) <span class="hljs-keyword">then</span> out[#out+<span class="hljs-number">1</span>] = col <span class="hljs-keyword">end</span> <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">return</span> out
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:head</span><span class="hljs-params">(t,  col)</span></span>
+  <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(t) <span class="hljs-keyword">do</span>
+    col = <span class="hljs-built_in">self</span>:nump(v) <span class="hljs-keyword">and</span> Num <span class="hljs-keyword">or</span> Sym
+    <span class="hljs-built_in">self</span>.cols[k] = col(v,k) <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:add</span><span class="hljs-params">(t)</span></span>
+  <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(t) <span class="hljs-keyword">do</span> <span class="hljs-built_in">self</span>.cols[k]:add(v) <span class="hljs-keyword">end</span>
+  <span class="hljs-built_in">self</span>.rows[#<span class="hljs-built_in">self</span>.rows+<span class="hljs-number">1</span>] = t
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Data:read</span><span class="hljs-params">(f)</span></span>
+  <span class="hljs-keyword">for</span> n,row <span class="hljs-keyword">in</span> lib.csv(f) <span class="hljs-keyword">do</span>
+    <span class="hljs-keyword">if</span> n==<span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-built_in">self</span>:head(row) <span class="hljs-keyword">else</span> <span class="hljs-built_in">self</span>:add(row) <span class="hljs-keyword">end</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">return</span> Data</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>sym.lua</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>sym.lua</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="col.html">
+                    ./src/col.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="data.html">
+                    ./src/data.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="flip.html">
+                    ./src/flip.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="lib.html">
+                    ./src/lib.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ml.html">
+                    ./src/ml.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="num.html">
+                    ./src/num.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="row.html">
+                    ./src/row.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="sym.html">
+                    ./src/sym.lua
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="hljs-built_in">require</span> <span class="hljs-string">"flip"</span>
+
+<span class="hljs-keyword">local</span> Sym=class(<span class="hljs-built_in">require</span> <span class="hljs-string">"col"</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Sym:_init</span><span class="hljs-params">(txt,pos)</span></span>
+  <span class="hljs-built_in">self</span>:super(txt,pos)
+  <span class="hljs-built_in">self</span>.counts = {}
+  <span class="hljs-built_in">self</span>.most   = <span class="hljs-number">0</span>
+  <span class="hljs-built_in">self</span>.mode   = <span class="hljs-literal">nil</span>
+  <span class="hljs-built_in">self</span>._ent   = <span class="hljs-literal">nil</span> 
+  <span class="hljs-built_in">self</span>.nk     = <span class="hljs-number">0</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Sym:__tostring</span><span class="hljs-params">()</span></span>
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">string</span>.<span class="hljs-built_in">format</span>(<span class="hljs-string">"Sym(%s,%s,%s)"</span>, 
+                       <span class="hljs-built_in">self</span>.txt,<span class="hljs-built_in">self</span>.mode, <span class="hljs-built_in">self</span>.most)
+<span class="hljs-keyword">end</span>
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Sym:add</span> <span class="hljs-params">(x)</span></span>
+  <span class="hljs-keyword">if</span> x ~= the.ch.skip <span class="hljs-keyword">then</span> 
+    <span class="hljs-built_in">self</span>._ent = <span class="hljs-literal">nil</span> 
+    <span class="hljs-built_in">self</span>.n    = <span class="hljs-built_in">self</span>.n + <span class="hljs-number">1</span>
+    <span class="hljs-built_in">self</span>.n    = <span class="hljs-built_in">self</span>.n + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">self</span>.counts[x] <span class="hljs-keyword">then</span>
+      <span class="hljs-built_in">self</span>.counts[x] = <span class="hljs-number">0</span> 
+      <span class="hljs-built_in">self</span>.nk = <span class="hljs-built_in">self</span>.nk + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">local</span> seen = <span class="hljs-built_in">self</span>.counts[x] + <span class="hljs-number">1</span>
+    <span class="hljs-built_in">self</span>.counts[x] = seen 
+    <span class="hljs-keyword">if</span> seen &gt; <span class="hljs-built_in">self</span>.most <span class="hljs-keyword">then</span>
+      <span class="hljs-built_in">self</span>.most, <span class="hljs-built_in">self</span>.mode = seen, x <span class="hljs-keyword">end</span> 
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">return</span> x
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Sym:ent</span><span class="hljs-params">()</span></span>
+  <span class="hljs-keyword">if</span> <span class="hljs-built_in">self</span>._ent == <span class="hljs-literal">nil</span> <span class="hljs-keyword">then</span> 
+    <span class="hljs-keyword">local</span> e = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> _,f <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(<span class="hljs-built_in">self</span>.counts) <span class="hljs-keyword">do</span>
+      <span class="hljs-keyword">if</span> f &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span>
+        e = e - (f/<span class="hljs-built_in">self</span>.n) * <span class="hljs-built_in">math</span>.<span class="hljs-built_in">log</span>(f/i.n,<span class="hljs-number">2</span>) <span class="hljs-keyword">end</span> <span class="hljs-keyword">end</span>
+    <span class="hljs-built_in">self</span>._ent = e
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">return</span> i._ent 
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">return</span> Sym</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

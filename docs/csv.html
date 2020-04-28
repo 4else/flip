@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>csv.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+<script 
+ src="https://kit.fontawesome.com/7abee6b155.js" 
+ crossorigin="anonymous"></script>
+<script 
+ src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script 
+ id=MathJax-script async 
+ src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+<div class="ribbon">
+  <a href="#">Fork me on GitHub</a>
+</div>
+&nbsp;<p>&nbsp;<p>    <div class='docs'><h1>csv.lua</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+<center>
+<br><a href="https://www.lua.org"><img 
+      src=https://img.shields.io/badge/language-lua-orange></a>
+<img  src=https://img.shields.io/badge/purpose-teach,ai,se-blueviolet> 
+<img  src=https://img.shields.io/badge/platform-mac,*nux-informational> 
+<a    href="https://travis-ci.org/timm/lua"><img 
+      src=https://travis-ci.org/timm/lua.svg?branch=master></a><br>
+1 | b | c d
+e | f  g
+<hr>
+</center>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="nb">require</span> <span class="s2">&quot;flip&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Return an iterator that returns all non-blank
+lines, divided into cells (coerced to numbers,
+if need be), with all white space and comments removed.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <hr />
+<h2>Support code</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Select the cells listed in <code>want</code> from <code>row</code>
+(and while we are here, coerce any 
+number strings to numbers).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span> <span class="kr">function</span> <span class="nf">select</span><span class="p">(</span><span class="n">want</span><span class="p">,</span><span class="n">row</span><span class="p">,</span>     <span class="n">out</span><span class="p">,</span><span class="n">cell</span><span class="p">)</span>
+  <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="kr">for</span> <span class="n">put</span><span class="p">,</span><span class="n">get</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">want</span><span class="p">)</span> <span class="kr">do</span> 
+    <span class="n">cell</span>     <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">get</span><span class="p">]</span>
+    <span class="n">cell</span>     <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="ow">or</span> <span class="n">cell</span> <span class="c1">-- coercian</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">put</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span> <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">out</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Determine what we want. Specifically, We want to
+skip over any column whose name starts with <code>the.ch.skip</code>
+(which defaults to <code>?</code>).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span> <span class="kr">function</span> <span class="nf">wanted</span><span class="p">(</span><span class="n">row</span><span class="p">,</span>    <span class="n">out</span><span class="p">,</span><span class="n">put</span><span class="p">)</span>
+  <span class="n">out</span><span class="p">,</span> <span class="n">put</span> <span class="o">=</span> <span class="p">{},</span><span class="mi">0</span>
+  <span class="kr">for</span> <span class="n">get</span><span class="p">,</span><span class="n">txt</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="kr">do</span>
+    <span class="kr">if</span> <span class="nb">string.sub</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">~=</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span>
+      <span class="n">put</span>      <span class="o">=</span> <span class="n">put</span> <span class="o">+</span> <span class="mi">1</span>
+      <span class="n">out</span><span class="p">[</span><span class="n">put</span><span class="p">]</span> <span class="o">=</span> <span class="n">get</span> 
+  <span class="kr">end</span> <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">out</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Low-level function: Split the string <code>s</code> on some seperatpr <code>sep</code> 
+(which defaults to &ldquo;,&rdquo;) into a return list.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span> <span class="kr">function</span> <span class="nf">split</span><span class="p">(</span><span class="n">s</span><span class="p">,</span>     <span class="n">sep</span><span class="p">,</span><span class="n">out</span><span class="p">)</span>
+  <span class="n">out</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">sep</span> <span class="ow">or</span> <span class="s2">&quot;,&quot;</span>
+  <span class="kr">for</span> <span class="n">y</span> <span class="kr">in</span> <span class="nb">string.gmatch</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s2">&quot;([^&quot;</span> <span class="o">..</span><span class="n">sep</span><span class="o">..</span> <span class="s2">&quot;]+)&quot;</span><span class="p">)</span> <span class="kr">do</span> 
+    <span class="n">out</span><span class="p">[</span><span class="o">#</span><span class="n">out</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span> <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">out</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <hr />
+<h2>Main</h2>
+<p>This iterator reads from <code>file</code> or, if that is absent,
+from standard input.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">return</span> <span class="kr">function</span> <span class="p">(</span><span class="n">file</span><span class="p">,</span>     <span class="n">want</span><span class="p">)</span>
+  <span class="kd">local</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">file</span> <span class="ow">and</span> <span class="nb">io.input</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">io.input</span><span class="p">()</span>
+  <span class="kd">local</span> <span class="n">tmp</span>    <span class="o">=</span> <span class="nb">io.read</span><span class="p">()</span>
+  <span class="kr">return</span> <span class="kr">function</span><span class="p">()</span>
+    <span class="kr">if</span> <span class="n">tmp</span> <span class="kr">then</span>
+      <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">:</span><span class="n">gsub</span><span class="p">(</span><span class="s2">&quot;[</span><span class="se">\t\r</span><span class="s2"> ]*&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="c1">-- no whitespace</span>
+               <span class="p">:</span><span class="n">gsub</span><span class="p">(</span><span class="s2">&quot;#.*&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>      <span class="c1">-- no comments</span>
+      <span class="kd">local</span> <span class="n">row</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+      <span class="n">tmp</span> <span class="o">=</span> <span class="nb">io.read</span><span class="p">()</span>
+      <span class="kr">if</span> <span class="o">#</span><span class="n">row</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="kr">then</span> 
+        <span class="n">want</span> <span class="o">=</span> <span class="n">want</span> <span class="ow">or</span> <span class="n">wanted</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> 
+        <span class="kr">return</span> <span class="nb">select</span><span class="p">(</span><span class="n">want</span><span class="p">,</span><span class="n">row</span><span class="p">)</span> 
+      <span class="kr">end</span>
+    <span class="kr">else</span>
+      <span class="nb">io.close</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span> <span class="kr">end</span> <span class="kr">end</span>   
+<span class="kr">end</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

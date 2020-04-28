@@ -260,6 +260,9 @@ bashrc() { cat<<-'EOF'
 	doc() {
 	    (cd $root
 		pycco -d docs `ls ./src/*.lua | grep -v ok.lua` )
+   cd docs
+   cp ../etc/pycco.css .
+   for i in *.html; do ../etc/top $i; done
 	}
 	publish() {
 		find $root -name '*.md' -exec $root/etc/top {} \;

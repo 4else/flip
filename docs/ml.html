@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>ml.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>ml.lua</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <hr />
+<p>Microlight - a very compact Lua utilities module</p>
+<p>Steve Donovan, 2012; License MIT
+@module ml</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">ml</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kd">local</span> <span class="nb">select</span><span class="p">,</span><span class="nb">pairs</span> <span class="o">=</span> <span class="nb">select</span><span class="p">,</span><span class="nb">pairs</span>
+<span class="kd">local</span> <span class="n">function_arg</span>
+
+<span class="nb">table.unpack</span> <span class="o">=</span> <span class="nb">table.unpack</span> <span class="ow">or</span> <span class="n">unpack</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <hr />
+<p>String utilties.
+@section string</p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <ul>
+<li>split a delimited string into an array of strings.
+@param s The input string
+@param re A Lua string pattern; defaults to &lsquo;%s+&rsquo;
+@param n optional maximum number of splits
+@return an array of strings</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">re</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">find</span><span class="p">,</span><span class="n">sub</span><span class="p">,</span><span class="n">append</span> <span class="o">=</span> <span class="nb">string.find</span><span class="p">,</span> <span class="nb">string.sub</span><span class="p">,</span> <span class="nb">table.insert</span>
+    <span class="kd">local</span> <span class="n">i1</span><span class="p">,</span><span class="n">ls</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,{}</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">re</span> <span class="kr">then</span> <span class="n">re</span> <span class="o">=</span> <span class="s1">&#39;%s+&#39;</span> <span class="kr">end</span>
+    <span class="kr">if</span> <span class="n">re</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="kr">then</span> <span class="kr">return</span> <span class="p">{</span><span class="n">s</span><span class="p">}</span> <span class="kr">end</span>
+    <span class="kr">while</span> <span class="kc">true</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">i2</span><span class="p">,</span><span class="n">i3</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">re</span><span class="p">,</span><span class="n">i1</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">i2</span> <span class="kr">then</span>
+            <span class="kd">local</span> <span class="n">last</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i1</span><span class="p">)</span>
+            <span class="kr">if</span> <span class="n">last</span> <span class="o">~=</span> <span class="s1">&#39;&#39;</span> <span class="kr">then</span> <span class="n">append</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span><span class="n">last</span><span class="p">)</span> <span class="kr">end</span>
+            <span class="kr">if</span> <span class="o">#</span><span class="n">ls</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ls</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="kr">then</span>
+                <span class="kr">return</span> <span class="p">{}</span>
+            <span class="kr">else</span>
+                <span class="kr">return</span> <span class="n">ls</span>
+            <span class="kr">end</span>
+        <span class="kr">end</span>
+        <span class="n">append</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span><span class="n">sub</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="kr">if</span> <span class="n">n</span> <span class="ow">and</span> <span class="o">#</span><span class="n">ls</span> <span class="o">==</span> <span class="n">n</span> <span class="kr">then</span>
+            <span class="n">ls</span><span class="p">[</span><span class="o">#</span><span class="n">ls</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i1</span><span class="p">)</span>
+            <span class="kr">return</span> <span class="n">ls</span>
+        <span class="kr">end</span>
+        <span class="n">i1</span> <span class="o">=</span> <span class="n">i3</span><span class="o">+</span><span class="mi">1</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="n">ml</span><span class="p">.</span><span class="n">lua51</span> <span class="o">=</span> <span class="nb">_VERSION</span><span class="p">:</span><span class="n">match</span> <span class="s1">&#39;5%.1$&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <ul>
+<li>escape any &lsquo;magic&rsquo; pattern characters in a string.
+Useful for functions like <code>string.gsub</code> and <code>string.match</code> which
+always work with Lua string patterns.
+For any s, <code>s:match('^'..escape(s)..'$') == s</code> is <code>true</code>.
+@param s The input string
+@return an escaped string</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">escape</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;[%-%.%+%[%]%(%)%$%^%%%?%*]&#39;</span><span class="p">,</span><span class="s1">&#39;%%%1&#39;</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">ml</span><span class="p">.</span><span class="n">lua51</span> <span class="kr">then</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span><span class="p">:</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;%z&#39;</span><span class="p">,</span><span class="s1">&#39;%%z&#39;</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <ul>
+<li>expand a string containing any <code>${var}</code> or <code>$var</code>.
+Substitution values should be only numbers or strings.
+However, you should pick <em>either one</em> consistently!
+@param s the string
+@param subst either a table or a function (as in <code>string.gsub</code>)
+@return expanded string</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">expand</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">subst</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span><span class="p">,</span><span class="n">k</span> <span class="o">=</span> <span class="n">s</span><span class="p">:</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;%${([%w_]+)}&#39;</span><span class="p">,</span><span class="n">subst</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="kr">then</span> <span class="kr">return</span> <span class="n">res</span> <span class="kr">end</span>
+    <span class="kr">return</span> <span class="p">(</span><span class="n">res</span><span class="p">:</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;%$([%w_]+)&#39;</span><span class="p">,</span><span class="n">subst</span><span class="p">))</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <ul>
+<li>return the contents of a file as a string
+@param filename The file path
+@param is_bin open in binary mode, default false
+@return file contents, or nil,error</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">readfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">is_bin</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">is_bin</span> <span class="ow">and</span> <span class="s1">&#39;b&#39;</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
+    <span class="kd">local</span> <span class="n">f</span><span class="p">,</span><span class="n">err</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="o">..</span><span class="n">mode</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span><span class="n">err</span> <span class="kr">end</span>
+    <span class="kd">local</span> <span class="n">res</span><span class="p">,</span><span class="n">err</span> <span class="o">=</span> <span class="n">f</span><span class="p">:</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;*a&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">res</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span><span class="n">err</span> <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <ul>
+<li>write a string to a file,
+@param filename The file path
+@param str The string
+@param is_bin open in binary mode, default false
+@return true or nil,error</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">writefile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">str</span><span class="p">,</span><span class="n">is_bin</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">f</span><span class="p">,</span><span class="n">err</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="o">..</span><span class="p">(</span><span class="n">is_bin</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">nil</span><span class="p">,</span><span class="n">err</span> <span class="kr">end</span>
+    <span class="n">f</span><span class="p">:</span><span class="n">write</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+    <span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+    <span class="kr">return</span> <span class="kc">true</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <hr />
+<p>File and Path functions
+@section file</p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <ul>
+<li>Does a file exist?
+@param filename a file path
+@return the file path, otherwise nil
+@usage file = exists &lsquo;readme&rsquo; or exists &lsquo;readme.txt&rsquo; or exists &lsquo;readme.md&rsquo;</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">exists</span> <span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">io.open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">f</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="kc">nil</span>
+    <span class="kr">else</span>
+        <span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+        <span class="kr">return</span> <span class="n">filename</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">sep</span><span class="p">,</span> <span class="n">other_sep</span> <span class="o">=</span> <span class="nb">package.config</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="s1">&#39;/&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <ul>
+<li>split a path into directory and file part.
+if there&rsquo;s no directory part, the first value will be the empty string.
+Handles both forward and back-slashes on Windows.
+@param P A file path
+@return the directory part
+@return the file part</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">splitpath</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="o">#</span><span class="n">P</span>
+    <span class="kd">local</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="kr">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">ch</span> <span class="o">~=</span> <span class="n">sep</span> <span class="ow">and</span> <span class="n">ch</span> <span class="o">~=</span> <span class="n">other_sep</span> <span class="kr">do</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">P</span>
+    <span class="kr">else</span>
+        <span class="kr">return</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <ul>
+<li>split a path into root and extension part.
+if there&rsquo;s no extension part, the second value will be empty
+@param P A file path
+@return the name part
+@return the extension</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">splitext</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">i</span> <span class="o">=</span> <span class="o">#</span><span class="n">P</span>
+    <span class="kd">local</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="kr">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">ch</span> <span class="o">~=</span> <span class="s1">&#39;.&#39;</span> <span class="kr">do</span>
+        <span class="kr">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="n">sep</span> <span class="ow">or</span> <span class="n">ch</span> <span class="o">==</span> <span class="n">other_sep</span> <span class="kr">then</span>
+            <span class="kr">return</span> <span class="n">P</span><span class="p">,</span><span class="s1">&#39;&#39;</span>
+        <span class="kr">end</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="n">P</span><span class="p">,</span><span class="s1">&#39;&#39;</span>
+    <span class="kr">else</span>
+        <span class="kr">return</span> <span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">P</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <hr />
+<p>Extended table functions.
+&lsquo;array&rsquo; here is shorthand for &lsquo;array-like table&rsquo;; these functions
+only operate over the numeric <code>1..#t</code> range of a table and are
+particularly efficient for this purpose.
+@section table</p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span> <span class="nb">tostring</span> <span class="o">=</span> <span class="nb">tostring</span> <span class="c1">-- so we can globally override tostring!</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">quote</span> <span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="p">(</span><span class="s1">&#39;%q&#39;</span><span class="p">):</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="kr">else</span>
+        <span class="kr">return</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">lua_keyword</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">[</span><span class="s2">&quot;and&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;break&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>  <span class="p">[</span><span class="s2">&quot;do&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;else&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;elseif&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;false&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;for&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;if&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>  <span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;nil&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;not&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;or&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;repeat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;then&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;until&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>  <span class="p">[</span><span class="s2">&quot;while&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;goto&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">is_iden</span> <span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">key</span><span class="p">:</span><span class="n">match</span> <span class="s1">&#39;^[%a_][%w_]*$&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">lua_keyword</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="kr">end</span>
+
+
+<span class="kd">local</span> <span class="n">tbuff</span>
+<span class="kr">function</span> <span class="nf">tbuff</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">buff</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">start_indent</span><span class="p">,</span><span class="n">indent</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">start_indent2</span><span class="p">,</span> <span class="n">indent2</span>
+    <span class="kr">if</span> <span class="n">start_indent</span> <span class="kr">then</span>
+        <span class="n">start_indent2</span> <span class="o">=</span> <span class="n">indent</span>
+        <span class="n">indent2</span> <span class="o">=</span> <span class="n">indent</span> <span class="o">..</span> <span class="n">indent</span>
+    <span class="kr">end</span>
+    <span class="kd">local</span> <span class="kr">function</span> <span class="nf">append</span> <span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kr">end</span>
+        <span class="n">buff</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="kd">local</span> <span class="kr">function</span> <span class="nf">put_item</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;table&#39;</span> <span class="kr">then</span>
+            <span class="kr">if</span> <span class="ow">not</span> <span class="n">buff</span><span class="p">.</span><span class="n">tables</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="kr">then</span>
+                <span class="n">buff</span><span class="p">.</span><span class="n">tables</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">tbuff</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">buff</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">start_indent2</span><span class="p">,</span><span class="n">indent2</span><span class="p">)</span>
+            <span class="kr">else</span>
+                <span class="n">append</span><span class="p">(</span><span class="s2">&quot;&lt;cycle&gt;&quot;</span><span class="p">)</span>
+            <span class="kr">end</span>
+        <span class="kr">else</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">quote</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="kr">end</span>
+        <span class="n">append</span> <span class="s2">&quot;,&quot;</span>
+        <span class="kr">if</span> <span class="n">start_indent</span> <span class="kr">then</span> <span class="n">append</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="n">append</span> <span class="s2">&quot;{&quot;</span>
+    <span class="kr">if</span> <span class="n">start_indent</span> <span class="kr">then</span> <span class="n">append</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>array part -------</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="kd">local</span> <span class="n">array</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">for</span> <span class="n">i</span><span class="p">,</span><span class="n">value</span> <span class="kr">in</span> <span class="nb">ipairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span>
+        <span class="n">append</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span>
+        <span class="n">put_item</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>&lsquo;map&rsquo; part ------</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="kr">for</span> <span class="n">key</span><span class="p">,</span><span class="n">value</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span> <span class="kr">if</span> <span class="ow">not</span> <span class="n">array</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="kr">then</span>
+        <span class="n">append</span><span class="p">(</span><span class="n">indent</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>non-identifiers need [&ldquo;key&rdquo;]</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">~=</span><span class="s1">&#39;string&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_iden</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="kr">then</span>
+            <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">==</span><span class="s1">&#39;table&#39;</span> <span class="kr">then</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">tstring</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="kr">else</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">quote</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="kr">end</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span><span class="o">..</span><span class="n">key</span><span class="o">..</span><span class="s2">&quot;]&quot;</span>
+        <span class="kr">end</span>
+        <span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="o">..</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+        <span class="n">put_item</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="kr">end</span> <span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>removing trailing comma is done for prettiness, but this implementation
+is not pretty at all!</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="kd">local</span> <span class="n">last</span> <span class="o">=</span> <span class="n">start_indent</span> <span class="ow">and</span> <span class="n">buff</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">buff</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="kr">if</span> <span class="n">start_indent</span> <span class="kr">then</span>
+        <span class="kr">if</span> <span class="n">last</span> <span class="o">==</span> <span class="s1">&#39;{&#39;</span> <span class="kr">then</span> <span class="c1">-- empty table</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="kr">else</span>
+            <span class="kr">if</span> <span class="n">last</span> <span class="o">==</span> <span class="s1">&#39;,&#39;</span> <span class="kr">then</span> <span class="c1">-- get rid of trailing comma</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">2</span>
+                <span class="n">append</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="kr">end</span>
+            <span class="n">append</span><span class="p">(</span><span class="n">start_indent</span><span class="p">)</span>
+        <span class="kr">end</span>
+    <span class="kr">elseif</span> <span class="n">last</span> <span class="o">==</span> <span class="s2">&quot;,&quot;</span> <span class="kr">then</span> <span class="c1">-- get rid of trailing comma</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="n">append</span> <span class="s2">&quot;}&quot;</span>
+    <span class="kr">return</span> <span class="n">k</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <ul>
+<li>return a string representation of a Lua value.
+Cycles are detected, and the result can be optionally indented nicely.
+@param t the table
+@param how (optional) a table with fields <code>spacing' and 'indent', or a string corresponding
+to</code>indent`.
+@return a string</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">tstring</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">how</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;table&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">getmetatable</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getmetatable</span><span class="p">(</span><span class="n">t</span><span class="p">).</span><span class="n">__tostring</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="kd">local</span> <span class="n">buff</span> <span class="o">=</span> <span class="p">{</span><span class="n">tables</span><span class="o">=</span><span class="p">{[</span><span class="n">t</span><span class="p">]</span><span class="o">=</span><span class="kc">true</span><span class="p">}}</span>
+        <span class="n">how</span> <span class="o">=</span> <span class="n">how</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">how</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span> <span class="kr">then</span> <span class="n">how</span> <span class="o">=</span> <span class="p">{</span><span class="n">indent</span> <span class="o">=</span> <span class="n">how</span><span class="p">}</span> <span class="kr">end</span>
+        <span class="nb">pcall</span><span class="p">(</span><span class="n">tbuff</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">buff</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">how</span><span class="p">.</span><span class="n">spacing</span> <span class="ow">or</span> <span class="n">how</span><span class="p">.</span><span class="n">indent</span><span class="p">,</span><span class="n">how</span><span class="p">.</span><span class="n">indent</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="nb">table.concat</span><span class="p">(</span><span class="n">buff</span><span class="p">)</span>
+    <span class="kr">else</span>
+        <span class="kr">return</span> <span class="n">quote</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">append</span> <span class="o">=</span> <span class="nb">table.insert</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <ul>
+<li>collect a series of values from an interator.
+@param &hellip; iterator
+@return array-like table
+@usage collect(pairs(t)) is the same as keys(t)</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">collect</span> <span class="p">(...)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">for</span> <span class="n">k</span> <span class="kr">in</span> <span class="p">...</span> <span class="kr">do</span> <span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <ul>
+<li>collect from an interator up to a condition.
+If the function returns true, then collection stops.
+@param f predicate receiving (value,count)
+@param &hellip; iterator
+@return array-like table</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">collectuntil</span> <span class="p">(</span><span class="n">f</span><span class="p">,...)</span>
+    <span class="kd">local</span> <span class="n">res</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">pred</span> <span class="o">=</span> <span class="p">{},</span><span class="mi">1</span><span class="p">,</span><span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">for</span> <span class="n">k</span> <span class="kr">in</span> <span class="p">...</span> <span class="kr">do</span>
+        <span class="kr">if</span> <span class="n">pred</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="kr">then</span> <span class="kr">break</span> <span class="kr">end</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <ul>
+<li>collect <code>n</code> values from an interator.
+@param n number of values to collect
+@param &hellip; iterator
+@return array-like table</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">collectn</span> <span class="p">(</span><span class="n">n</span><span class="p">,...)</span>
+    <span class="kr">return</span> <span class="n">collectuntil</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="kr">return</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="kr">end</span><span class="p">,...)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      <ul>
+<li>collect the second value from a iterator.
+If the second value is <code>nil</code>, it won&rsquo;t be collected!
+@param &hellip; iterator
+@return array-like table
+@usage collect2nd(pairs{one=1,two=2}) is {1,2} or {2,1}</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">collect2nd</span> <span class="p">(...)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="p">...</span> <span class="kr">do</span> <span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <ul>
+<li>extend a table by mapping a function over another table.
+@param dest destination table
+@param j start index in destination
+@param nilv default value to use if function returns <code>nil</code>
+@param f the function
+@param t source table
+@param &hellip; extra arguments to function</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">mapextend</span> <span class="p">(</span><span class="n">dest</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">nilv</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="kr">then</span> <span class="n">j</span> <span class="o">=</span> <span class="o">#</span><span class="n">dest</span> <span class="o">+</span> <span class="mi">1</span> <span class="kr">end</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">t</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">val</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],...)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">~=</span><span class="kc">nil</span> <span class="ow">and</span> <span class="n">val</span> <span class="ow">or</span> <span class="n">nilv</span>
+        <span class="kr">if</span> <span class="n">val</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="kr">then</span>
+            <span class="n">dest</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">dest</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">mapextend</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">mapextend</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <ul>
+<li>map a function over an array.
+The output must always be the same length as the input, so
+any <code>nil</code> values are mapped to <code>false</code>.
+@param f a function of one or more arguments
+@param t the array
+@param &hellip; any extra arguments to the function
+@return a new array with elements <code>f(t[i],...)</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">imap</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="kr">return</span> <span class="n">mapextend</span><span class="p">({},</span><span class="mi">1</span><span class="p">,</span><span class="kc">false</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <ul>
+<li>apply a function to each element of an array.
+@param f a function of one or more arguments
+@param t the array
+@param &hellip; any extra arguments to the function
+@return the transformed array</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">transform</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="kr">return</span> <span class="n">mapextend</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="kc">false</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <ul>
+<li>map a function over values from two arrays.
+Length of output is the size of the smallest array.
+@param f a function of two or more arguments
+@param t1 first array
+@param t2 second array
+@param &hellip; any extra arguments to the function
+@return a new array with elements <code>f(t1[i],t2[i],...)</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">imap2</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">,...)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kd">local</span> <span class="n">n</span> <span class="o">=</span> <span class="nb">math.min</span><span class="p">(</span><span class="o">#</span><span class="n">t1</span><span class="p">,</span><span class="o">#</span><span class="n">t2</span><span class="p">)</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span> <span class="kr">do</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">t1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">t2</span><span class="p">[</span><span class="n">i</span><span class="p">],...)</span> <span class="ow">or</span> <span class="kc">false</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <ul>
+<li>map a function over an array only keeping non-<code>nil</code> values.
+@param f a function of one or more arguments
+@param t the array
+@param &hellip; any extra arguments to the function
+@return a new array with elements <code>v = f(t[i],...) such that v ~= nil</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">imapfilter</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="kr">return</span> <span class="n">mapextend</span><span class="p">({},</span><span class="mi">1</span><span class="p">,</span><span class="kc">nil</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,...)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      <ul>
+<li>filter an array using a predicate.
+@param t a table
+@param pred a function that must return <code>nil</code> or <code>false</code>
+to exclude a value
+@param &hellip; any extra arguments to the predicate
+@return a new array such that <code>pred(t[i])</code> evaluates as true</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">ifilter</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">pred</span><span class="p">,...)</span>
+    <span class="kd">local</span> <span class="n">res</span><span class="p">,</span><span class="n">k</span> <span class="o">=</span> <span class="p">{},</span><span class="mi">1</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">t</span> <span class="kr">do</span>
+        <span class="kr">if</span> <span class="n">pred</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],...)</span> <span class="kr">then</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <ul>
+<li>find an item in an array using a predicate.
+@param t the array
+@param pred a function of at least one argument
+@param &hellip; any extra arguments
+@return the item value, or <code>nil</code>
+@usage ifind({{1,2},{4,5}},&rsquo;X[1]==Y&rsquo;,4) is {4,5}</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">ifind</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">pred</span><span class="p">,...)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">t</span> <span class="kr">do</span>
+        <span class="kr">if</span> <span class="n">pred</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],...)</span> <span class="kr">then</span>
+            <span class="kr">return</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <ul>
+<li>return the index of an item in an array.
+@param t the array
+@param value item value
+@param cmp optional comparison function (default is <code>X==Y</code>)
+@return index, otherwise <code>nil</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">indexof</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">cmp</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">cmp</span> <span class="kr">then</span> <span class="n">cmp</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">cmp</span><span class="p">)</span> <span class="kr">end</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">t</span> <span class="kr">do</span>
+        <span class="kd">local</span> <span class="n">v</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="kr">if</span> <span class="n">cmp</span> <span class="ow">and</span> <span class="n">cmp</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">==</span> <span class="n">value</span> <span class="kr">then</span>
+            <span class="kr">return</span> <span class="n">i</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">upper</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">i2</span> <span class="ow">or</span> <span class="n">i2</span> <span class="o">&gt;</span> <span class="o">#</span><span class="n">t</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="o">#</span><span class="n">t</span>
+    <span class="kr">elseif</span> <span class="n">i2</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="o">#</span><span class="n">t</span> <span class="o">+</span> <span class="n">i2</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">else</span>
+        <span class="kr">return</span> <span class="n">i2</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">copy_range</span> <span class="p">(</span><span class="n">dest</span><span class="p">,</span><span class="n">index</span><span class="p">,</span><span class="n">src</span><span class="p">,</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">k</span> <span class="o">=</span> <span class="n">index</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="kr">do</span>
+        <span class="n">dest</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">dest</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <ul>
+<li>return a slice of an array.
+Like <code>string.sub</code>, the end index may be negative.
+@param t the array
+@param i1 the start index, default 1
+@param i2 the end index, default #t
+@return an array of <code>t[i]</code> for <code>i</code> from <code>i1</code> to <code>i2</code> inclusive</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">sub</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+    <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span> <span class="o">=</span> <span class="n">i1</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">,</span> <span class="n">upper</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">copy_range</span><span class="p">({},</span><span class="mi">1</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      <ul>
+<li>delete a range of values from an array.
+@param tbl the array
+@param start start index
+@param finish end index (like <code>ml.sub</code>)</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">removerange</span><span class="p">(</span><span class="n">tbl</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">finish</span><span class="p">)</span>
+    <span class="n">finish</span> <span class="o">=</span> <span class="n">upper</span><span class="p">(</span><span class="n">tbl</span><span class="p">,</span><span class="n">finish</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">count</span> <span class="o">=</span> <span class="n">finish</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">for</span> <span class="n">k</span><span class="o">=</span><span class="n">start</span><span class="o">+</span><span class="n">count</span><span class="p">,</span><span class="o">#</span><span class="n">tbl</span> <span class="kr">do</span> <span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="n">count</span><span class="p">]</span><span class="o">=</span><span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="kr">end</span>
+    <span class="kr">for</span> <span class="n">k</span><span class="o">=#</span><span class="n">tbl</span><span class="p">,</span><span class="o">#</span><span class="n">tbl</span><span class="o">-</span><span class="n">count</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span> <span class="kr">do</span> <span class="n">tbl</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="kc">nil</span> <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      <ul>
+<li>copy values from <code>src</code> into <code>dest</code> starting at <code>index</code>.
+By default, it moves up elements of <code>dest</code> to make room.
+@param dest destination array
+@param index start index in destination
+@param src source array
+@param overwrite write over values</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">insertvalues</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span><span class="n">index</span><span class="p">,</span><span class="n">src</span><span class="p">,</span><span class="n">overwrite</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">sz</span> <span class="o">=</span> <span class="o">#</span><span class="n">src</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">overwrite</span> <span class="kr">then</span>
+        <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="o">#</span><span class="n">dest</span><span class="p">,</span><span class="n">index</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span> <span class="kr">do</span> <span class="n">dest</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">sz</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="n">copy_range</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span><span class="n">index</span><span class="p">,</span><span class="n">src</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sz</span><span class="p">)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      <ul>
+<li>extend an array using values from other tables.
+@{readme.md.Extracting_and_Mapping}
+@param t the array to be extended
+@param &hellip; the other arrays
+@return the extended array</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="nb">select</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,...)</span> <span class="kr">do</span>
+        <span class="n">ml</span><span class="p">.</span><span class="n">insertvalues</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="o">#</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nb">select</span><span class="p">(</span><span class="n">i</span><span class="p">,...),</span><span class="kc">true</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">t</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      <ul>
+<li>make an array of indexed values.
+Generalized table indexing. Result will only contain
+values for keys that exist.
+@param t a table
+@param keys an array of keys or indices
+@return an array <code>L</code> such that <code>L[keys[i]]</code>
+@usage indexby({one=1,two=2},{&lsquo;one&rsquo;,&rsquo;three&rsquo;}) is {1}
+@usage indexby({10,20,30,40},{2,4}) is {20,40}</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">indexby</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">keys</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">for</span> <span class="n">_</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="kr">do</span>
+        <span class="kr">if</span> <span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">~=</span> <span class="kc">nil</span> <span class="kr">then</span>
+            <span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">t</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      <ul>
+<li>create an array of numbers from start to end.
+With one argument it goes <code>1..x1</code>. <code>d</code> may be a
+floating-point fraction
+@param x1 start value
+@param x2 end value
+@param d increment (default 1)
+@return array of numbers
+@usage range(2,10) is {2,3,4,5,6,7,8,9,10}
+@usage range(5) is {1,2,3,4,5}</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">range</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="ow">not</span> <span class="n">x2</span> <span class="kr">then</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">x1</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">d</span> <span class="ow">or</span> <span class="mi">1</span>
+    <span class="kd">local</span> <span class="n">res</span><span class="p">,</span><span class="n">k</span> <span class="o">=</span> <span class="p">{},</span><span class="mi">1</span>
+    <span class="kr">for</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">d</span> <span class="kr">do</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
+      <p>Bring modules or tables into &lsquo;t<code>.
+If</code>lib<code>is a string, then it becomes the result of</code>require<code>With only one argument, the second argument is assumed to be
+the</code>ml<code>table itself.
+@param t table to be updated, or current environment
+@param lib table, module name or</code>nil` for importing &lsquo;ml&rsquo;
+@return the updated table</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">import</span><span class="p">(</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="kd">local</span> <span class="n">other</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      <p>explicit table, or current environment
+this isn&rsquo;t quite right - we won&rsquo;t get the calling module&rsquo;s _ENV
+this way. But it does prevent execution of the not-implemented setfenv.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="ow">or</span> <span class="n">_ENV</span> <span class="ow">or</span> <span class="n">getfenv</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">libs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">if</span> <span class="nb">select</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,...)</span><span class="o">==</span><span class="mi">0</span> <span class="kr">then</span> <span class="c1">-- default is to pull in this library!</span>
+        <span class="n">libs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">ml</span>
+    <span class="kr">else</span>
+        <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="nb">select</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,...)</span> <span class="kr">do</span>
+            <span class="kd">local</span> <span class="n">lib</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="n">i</span><span class="p">,...)</span>
+            <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">lib</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span> <span class="kr">then</span>
+                <span class="kd">local</span> <span class="n">value</span> <span class="o">=</span> <span class="nb">_G</span><span class="p">[</span><span class="n">lib</span><span class="p">]</span>
+                <span class="kr">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="kr">then</span> <span class="c1">-- lazy require!</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">require</span> <span class="p">(</span><span class="n">lib</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      <p>and use the module part of package for the key</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                    <span class="n">lib</span> <span class="o">=</span> <span class="n">lib</span><span class="p">:</span><span class="n">match</span> <span class="s1">&#39;[%w_]+$&#39;</span>
+                <span class="kr">end</span>
+                <span class="n">lib</span> <span class="o">=</span> <span class="p">{[</span><span class="n">lib</span><span class="p">]</span><span class="o">=</span><span class="n">value</span><span class="p">}</span>
+            <span class="kr">end</span>
+            <span class="n">libs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">lib</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">ml</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="nb">table.unpack</span><span class="p">(</span><span class="n">libs</span><span class="p">))</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      <ul>
+<li>add the key/value pairs of arrays to the first array.
+For sets, this is their union. For the same keys,
+the values from the first table will be overwritten.
+@param t table to be updated
+@param &hellip; tables containg more pairs to be added
+@return the updated table</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">update</span> <span class="p">(</span><span class="n">t</span><span class="p">,...)</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="nb">select</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">,...)</span> <span class="kr">do</span>
+        <span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="nb">select</span><span class="p">(</span><span class="n">i</span><span class="p">,...))</span> <span class="kr">do</span>
+            <span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">t</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
+      <ul>
+<li>make a table from an array of keys and an array of values.
+@param t an array of keys
+@param tv an array of values
+@return a table where <code>{[t[i]]=tv[i]}</code>
+@usage makemap({&lsquo;power&rsquo;,&rsquo;glory&rsquo;},{20,30}) is {power=20,glory=30}</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">makemap</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">tv</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">t</span> <span class="kr">do</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">tv</span> <span class="ow">and</span> <span class="n">tv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="n">i</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">res</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-40'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-40'>#</a>
+      </div>
+      <ul>
+<li>make a set from an array.
+The values are the original array indices.
+@param t an array of values
+@return a table where the keys are the indices in the array.
+@usage invert{&lsquo;one&rsquo;,&rsquo;two&rsquo;} is {one=1,two=2}
+@function ml.invert</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">ml</span><span class="p">.</span><span class="n">invert</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">makemap</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-41'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-41'>#</a>
+      </div>
+      <ul>
+<li>extract the keys of a table as an array.
+@param t a table
+@return an array of keys</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">keys</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">ml</span><span class="p">.</span><span class="n">collect</span><span class="p">(</span><span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-42'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-42'>#</a>
+      </div>
+      <ul>
+<li>are all the values of <code>other</code> in <code>t</code>?
+@param t a set
+@param other a possible subset
+@treturn bool</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">issubset</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">other</span><span class="p">)</span>
+    <span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="kr">do</span>
+        <span class="kr">if</span> <span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">false</span> <span class="kr">end</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="kc">true</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-43'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-43'>#</a>
+      </div>
+      <ul>
+<li>are all the keys of <code>other</code> in <code>t</code>?
+@param t a table
+@param other another table
+@treturn bool</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">ml</span><span class="p">.</span><span class="n">containskeys</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">issubset</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-44'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-44'>#</a>
+      </div>
+      <ul>
+<li>return the number of keys in this table, or members in this set.
+@param t a table
+@treturn int key count</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">count</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kr">for</span> <span class="n">k</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span> <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span> <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">count</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-45'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-45'>#</a>
+      </div>
+      <ul>
+<li>do these tables have the same keys?
+THis is set equality.
+@param t a table
+@param other a table
+@return true or false</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">equalkeys</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">other</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">ml</span><span class="p">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ml</span><span class="p">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">other</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-46'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-46'>#</a>
+      </div>
+      <hr />
+<p>Functional helpers.
+@section function</p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-47'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      <ul>
+<li>create a function which will throw an error on failure.
+@param f a function that returns nil,err if it fails
+@return an equivalent function that raises an error</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">throw</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kr">function</span><span class="p">(...)</span>
+        <span class="kd">local</span> <span class="n">r1</span><span class="p">,</span><span class="n">r2</span><span class="p">,</span><span class="n">r3</span> <span class="o">=</span> <span class="n">f</span><span class="p">(...)</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">r1</span> <span class="kr">then</span> <span class="nb">error</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="kr">end</span>
+        <span class="kr">return</span> <span class="n">r1</span><span class="p">,</span><span class="n">r2</span><span class="p">,</span><span class="n">r3</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      <ul>
+<li>bind the value <code>v</code> to the first argument of function <code>f</code>.
+@param f a function of at least one argument
+@param v a value
+@return a function of one less argument
+@usage (bind1(string.match,&rsquo;hello&rsquo;)(&lsquo;^hell&rsquo;) == &lsquo;hell&rsquo;</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">bind1</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kr">function</span><span class="p">(...)</span>
+        <span class="kr">return</span> <span class="n">f</span><span class="p">(</span><span class="n">v</span><span class="p">,...)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      <ul>
+<li>bind the value <code>v</code> to the second argument of function <code>f</code>.
+@param f a function of at least one argument
+@param v a value
+@return a function of one less argument
+@usage (bind2(string.match,&rsquo;^hell&rsquo;)(&lsquo;hello&rsquo;) == &lsquo;hell&rsquo;</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">bind2</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kr">function</span><span class="p">(</span><span class="n">x</span><span class="p">,...)</span>
+        <span class="kr">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">v</span><span class="p">,...)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      <ul>
+<li>compose two functions.
+For instance, <code>printf</code> can be defined as <code>compose(io.write,string.format)</code>
+@param f1 a function
+@param f2 a function
+@return <code>f1(f2(...))</code></li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">compose</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span><span class="n">f2</span><span class="p">)</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kr">function</span><span class="p">(...)</span>
+        <span class="kr">return</span> <span class="n">f1</span><span class="p">(</span><span class="n">f2</span><span class="p">(...))</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-51'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-51'>#</a>
+      </div>
+      <ul>
+<li>a function returning the second value of <code>f</code>
+@param f a function returning at least two values
+@return a function returning second of those values
+@usage take2(splitpath) is basename</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">take2</span> <span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="kr">function</span><span class="p">(...)</span>
+        <span class="kd">local</span> <span class="n">_</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">f</span><span class="p">(...)</span>
+        <span class="kr">return</span> <span class="n">b</span>
+    <span class="kr">end</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-52'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-52'>#</a>
+      </div>
+      <ul>
+<li>is the object either a function or a callable object?.
+@param obj Object to check.
+@return true if callable</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">callable</span> <span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span> <span class="ow">or</span> <span class="nb">getmetatable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">getmetatable</span><span class="p">(</span><span class="n">obj</span><span class="p">).</span><span class="n">__call</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-53'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-53'>#</a>
+      </div>
+      <ul>
+<li>create a callable from an indexable object.
+@param t a table or other indexable object.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">map2fun</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="nb">setmetatable</span><span class="p">({},{</span>
+        <span class="n">__call</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">)</span> <span class="kr">return</span> <span class="n">t</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="kr">end</span>
+    <span class="p">})</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-54'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-54'>#</a>
+      </div>
+      <ul>
+<li>create an indexable object from a callable.
+@param f a callable of one argument.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">fun2map</span> <span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="nb">setmetatable</span><span class="p">({},{</span>
+        <span class="n">__index</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">key</span><span class="p">)</span> <span class="kr">return</span> <span class="n">f</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="kr">end</span><span class="p">;</span>
+        <span class="n">__newindex</span> <span class="o">=</span> <span class="kr">function</span><span class="p">()</span> <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;not writeable!&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="kr">end</span>
+    <span class="p">})</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="kr">function</span> <span class="nf">_string_lambda</span> <span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;return function(X,Y,Z) return &#39;</span><span class="o">..</span><span class="n">f</span><span class="o">..</span><span class="s1">&#39; end&#39;</span>
+    <span class="kd">local</span> <span class="n">chunk</span> <span class="o">=</span> <span class="nb">assert</span><span class="p">(</span><span class="n">loadstring</span><span class="p">(</span><span class="n">code</span><span class="p">,</span><span class="s1">&#39;tmp&#39;</span><span class="p">))</span>
+    <span class="kr">return</span> <span class="n">chunk</span><span class="p">()</span>
+<span class="kr">end</span>
+
+<span class="kd">local</span> <span class="n">string_lambda</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-55'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-55'>#</a>
+      </div>
+      <ul>
+<li>defines how we convert something to a callable.</li>
+</ul>
+<p>Currently, anything that matches @{callable} or is a <em>string lambda</em>.
+These are expressions with any of the placeholders, <code>X</code>,<code>Y</code> or <code>Z</code>
+corresponding to the first, second or third argument to the function.</p>
+<p>This can be overriden by people
+wishing to extend the idea of &lsquo;callable&rsquo; in this library.
+@param f a callable or a string lambda.
+@return a function
+@raise error if <code>f</code> is not callable in any way, or errors in string lambda.
+@usage function_arg(&lsquo;X+Y&rsquo;)(1,2) == 3</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span> <span class="kr">then</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">string_lambda</span> <span class="kr">then</span>
+            <span class="n">string_lambda</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">memoize</span><span class="p">(</span><span class="n">_string_lambda</span><span class="p">)</span>
+        <span class="kr">end</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">string_lambda</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">else</span>
+        <span class="nb">assert</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">callable</span><span class="p">(</span><span class="n">f</span><span class="p">),</span><span class="s2">&quot;expecting a function or callable object&quot;</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="kr">return</span> <span class="n">f</span>
+<span class="kr">end</span>
+
+<span class="n">function_arg</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">function_arg</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-56'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-56'>#</a>
+      </div>
+      <ul>
+<li>&lsquo;memoize&rsquo; a function (cache returned value for next call).
+This is useful if you have a function which is relatively expensive,
+but you don&rsquo;t know in advance what values will be required, so
+building a table upfront is wasteful/impossible.
+@param func a function of at least one argument
+@return a function with at least one argument, which is used as the key.</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">memoize</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="nb">setmetatable</span><span class="p">({},</span> <span class="p">{</span>
+        <span class="n">__index</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="p">...)</span>
+            <span class="kd">local</span> <span class="n">v</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">k</span><span class="p">,...)</span>
+            <span class="n">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="kr">return</span> <span class="n">v</span>
+        <span class="kr">end</span><span class="p">,</span>
+        <span class="n">__call</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="kr">return</span> <span class="n">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="kr">end</span>
+    <span class="p">})</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-57'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-57'>#</a>
+      </div>
+      <hr />
+<p>Classes.
+@section class</p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-58'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-58'>#</a>
+      </div>
+      <ul>
+<li>create a class with an optional base class.</li>
+</ul>
+<p>See  @{readme.md.Classes}
+The resulting table can be called to make a new object, which invokes
+an optional constructor named <code>_init</code>. If the base
+class has a constructor, you can call it as the <code>super()</code> method.
+Every class has a <code>_class</code> and a maybe-nil <code>_base</code> field, which can
+be accessed through the object.</p>
+<p>All metamethods are inherited.
+The class is given a function <code>Klass.classof(obj)</code>.
+@param base optional base class
+@return the callable metatable representing the class</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span> <span class="nc">ml</span><span class="p">.</span><span class="nf">class</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">klass</span><span class="p">,</span> <span class="n">base_ctor</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="kr">if</span> <span class="n">base</span> <span class="kr">then</span>
+        <span class="n">ml</span><span class="p">.</span><span class="n">import</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">klass</span><span class="p">.</span><span class="n">_base</span> <span class="o">=</span> <span class="n">base</span>
+        <span class="n">base_ctor</span> <span class="o">=</span> <span class="nb">rawget</span><span class="p">(</span><span class="n">base</span><span class="p">,</span><span class="s1">&#39;_init&#39;</span><span class="p">)</span>
+    <span class="kr">end</span>
+    <span class="n">klass</span><span class="p">.</span><span class="n">__index</span> <span class="o">=</span> <span class="n">klass</span>
+    <span class="n">klass</span><span class="p">.</span><span class="n">_class</span> <span class="o">=</span> <span class="n">klass</span>
+    <span class="n">klass</span><span class="p">.</span><span class="n">classof</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="kd">local</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">getmetatable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="c1">-- an object created by class() ?</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">m</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">m</span><span class="p">.</span><span class="n">_class</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">false</span> <span class="kr">end</span>
+        <span class="kr">while</span> <span class="n">m</span> <span class="kr">do</span> <span class="c1">-- follow the inheritance chain --</span>
+            <span class="kr">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">klass</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">true</span> <span class="kr">end</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="nb">rawget</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="s1">&#39;_base&#39;</span><span class="p">)</span>
+        <span class="kr">end</span>
+        <span class="kr">return</span> <span class="kc">false</span>
+    <span class="kr">end</span>
+    <span class="nb">setmetatable</span><span class="p">(</span><span class="n">klass</span><span class="p">,{</span>
+        <span class="n">__call</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">klass</span><span class="p">,...)</span>
+            <span class="kd">local</span> <span class="n">obj</span> <span class="o">=</span> <span class="nb">setmetatable</span><span class="p">({},</span><span class="n">klass</span><span class="p">)</span>
+            <span class="kr">if</span> <span class="nb">rawget</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="s1">&#39;_init&#39;</span><span class="p">)</span> <span class="kr">then</span>
+                <span class="n">klass</span><span class="p">.</span><span class="n">super</span> <span class="o">=</span> <span class="n">base_ctor</span>
+                <span class="kd">local</span> <span class="n">res</span> <span class="o">=</span> <span class="n">klass</span><span class="p">.</span><span class="n">_init</span><span class="p">(</span><span class="n">obj</span><span class="p">,...)</span> <span class="c1">-- call our constructor</span>
+                <span class="kr">if</span> <span class="n">res</span> <span class="kr">then</span> <span class="c1">-- which can return a new self..</span>
+                    <span class="n">obj</span> <span class="o">=</span> <span class="nb">setmetatable</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">klass</span><span class="p">)</span>
+                <span class="kr">end</span>
+            <span class="kr">elseif</span> <span class="n">base_ctor</span> <span class="kr">then</span> <span class="c1">-- call base ctor automatically</span>
+                <span class="n">base_ctor</span><span class="p">(</span><span class="n">obj</span><span class="p">,...)</span>
+            <span class="kr">end</span>
+            <span class="kr">return</span> <span class="n">obj</span>
+        <span class="kr">end</span>
+    <span class="p">})</span>
+    <span class="kr">return</span> <span class="n">klass</span>
+<span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-59'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-59'>#</a>
+      </div>
+      <hr />
+<p>a simple Array class.
+@{readme.md.Array_Class}</p>
+<p><code>table</code> functions: <code>sort</code>,<code>concat</code>,<code>insert</code>,<code>remove</code>,<code>insert</code> as <code>append</code>.</p>
+<p><code>ml</code> functions: <code>ifilter</code> as <code>filter</code>,<code>imap</code> as <code>map</code>,<code>sub</code>,<code>indexby</code>,<code>range</code>,
+<code>indexof</code>,<code>ifind</code> as <code>find</code>,<code>extend</code>,<code>split</code> and <code>collect</code>.</p>
+<p>The <code>sorted</code> method returns a sorted copy.</p>
+<p>Concatenation, equality and custom tostring is defined.</p>
+<p>This implementation has covariant methods; so that methods like <code>map</code> and <code>sub</code>
+will return an object of the derived type, not <code>Array</code>
+@table Array</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span> <span class="n">Array</span>
+
+<span class="kr">if</span> <span class="ow">not</span> <span class="nb">rawget</span><span class="p">(</span><span class="nb">_G</span><span class="p">,</span><span class="s1">&#39;NO_MICROLIGHT_ARRAY&#39;</span><span class="p">)</span> <span class="kr">then</span>
+
+    <span class="n">Array</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">class</span><span class="p">()</span>
+
+    <span class="kd">local</span> <span class="n">extend</span><span class="p">,</span> <span class="nb">setmetatable</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">extend</span><span class="p">,</span> <span class="nb">setmetatable</span><span class="p">,</span> <span class="n">ml</span><span class="p">.</span><span class="n">compose</span>
+
+    <span class="kd">local</span> <span class="kr">function</span> <span class="nf">set_class</span> <span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="n">res</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="nb">setmetatable</span><span class="p">(</span><span class="n">res</span><span class="p">,</span><span class="n">self</span><span class="p">.</span><span class="n">_class</span><span class="p">)</span>
+    <span class="kr">end</span>
+
+    <span class="kd">local</span> <span class="kr">function</span> <span class="nf">awrap</span> <span class="p">(</span><span class="n">fun</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,...)</span> <span class="kr">return</span> <span class="n">set_class</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="n">fun</span><span class="p">(</span><span class="n">self</span><span class="p">,...))</span>  <span class="kr">end</span>
+    <span class="kr">end</span>
+
+    <span class="kd">local</span> <span class="kr">function</span> <span class="nf">awraps</span> <span class="p">(</span><span class="n">fun</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="kr">function</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="n">f</span><span class="p">,...)</span> <span class="kr">return</span> <span class="n">set_class</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="n">fun</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">self</span><span class="p">,...))</span>  <span class="kr">end</span>
+    <span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-60'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-60'>#</a>
+      </div>
+      <p>a class is just a table of functions, so we can do wholesale updates!</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">ml</span><span class="p">.</span><span class="n">import</span><span class="p">(</span><span class="n">Array</span><span class="p">,{</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-61'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-61'>#</a>
+      </div>
+      <p>straight from the table library</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">concat</span><span class="o">=</span><span class="nb">table.concat</span><span class="p">,</span><span class="n">insert</span><span class="o">=</span><span class="nb">table.insert</span><span class="p">,</span><span class="n">remove</span><span class="o">=</span><span class="nb">table.remove</span><span class="p">,</span><span class="n">append</span><span class="o">=</span><span class="nb">table.insert</span><span class="p">,</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-62'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-62'>#</a>
+      </div>
+      <p>originals return table; these versions make the tables into arrays.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">filter</span><span class="o">=</span><span class="n">awrap</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">ifilter</span><span class="p">),</span><span class="n">sub</span><span class="o">=</span><span class="n">awrap</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">sub</span><span class="p">),</span> <span class="n">indexby</span><span class="o">=</span><span class="n">awrap</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">indexby</span><span class="p">),</span>
+        <span class="n">map</span><span class="o">=</span><span class="n">awraps</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">imap</span><span class="p">),</span> <span class="n">map2</span><span class="o">=</span><span class="n">awraps</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">imap2</span><span class="p">),</span> <span class="n">mapfilter</span><span class="o">=</span><span class="n">awraps</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">imapfilter</span><span class="p">),</span>
+        <span class="n">range</span><span class="o">=</span><span class="n">C</span><span class="p">(</span><span class="n">Array</span><span class="p">,</span><span class="n">ml</span><span class="p">.</span><span class="n">range</span><span class="p">),</span><span class="n">split</span><span class="o">=</span><span class="n">C</span><span class="p">(</span><span class="n">Array</span><span class="p">,</span><span class="n">ml</span><span class="p">.</span><span class="n">split</span><span class="p">),</span><span class="n">collect</span><span class="o">=</span><span class="n">C</span><span class="p">(</span><span class="n">Array</span><span class="p">,</span><span class="n">ml</span><span class="p">.</span><span class="n">collect</span><span class="p">),</span>
+        <span class="n">indexof</span><span class="o">=</span><span class="n">ml</span><span class="p">.</span><span class="n">indexof</span><span class="p">,</span> <span class="n">find</span><span class="o">=</span><span class="n">ml</span><span class="p">.</span><span class="n">ifind</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="n">ml</span><span class="p">.</span><span class="n">extend</span>
+    <span class="p">})</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-63'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-63'>#</a>
+      </div>
+      <p>A constructor can return a <em>specific</em> object</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="kr">function</span> <span class="nc">Array</span><span class="p">:</span><span class="nf">_init</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="ow">not</span> <span class="n">t</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">nil</span> <span class="kr">end</span>  <span class="c1">-- no table, make a new one</span>
+        <span class="kr">if</span> <span class="n">t</span><span class="p">.</span><span class="n">_class</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">_class</span> <span class="kr">then</span>  <span class="c1">-- was already a Array: copy constructor!</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="kr">end</span>
+        <span class="kr">return</span> <span class="n">t</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">:</span><span class="nf">sort</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">~=</span> <span class="s2">&quot;nil&quot;</span> <span class="kr">then</span> <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="kr">end</span>
+        <span class="nb">table.sort</span><span class="p">(</span><span class="n">self</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="n">self</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">:</span><span class="nf">sorted</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span><span class="n">sort</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">:</span><span class="nf">foreach</span><span class="p">(</span><span class="n">f</span><span class="p">,...)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">self</span> <span class="kr">do</span> <span class="n">f</span><span class="p">(</span><span class="n">self</span><span class="p">[</span><span class="n">i</span><span class="p">],...)</span> <span class="kr">end</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">.</span><span class="nf">mappers</span> <span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+        <span class="kd">local</span> <span class="n">method</span> <span class="o">=</span> <span class="n">Array</span><span class="p">.</span><span class="n">mapfilter</span>
+        <span class="kr">if</span> <span class="n">t</span><span class="p">.</span><span class="n">__use</span> <span class="kr">then</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">__use</span>
+            <span class="n">t</span><span class="p">.</span><span class="n">__use</span> <span class="o">=</span> <span class="kc">nil</span>
+        <span class="kr">end</span>
+        <span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">f</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span>
+            <span class="n">klass</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ml</span><span class="p">.</span><span class="n">bind2</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="n">function_arg</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">:</span><span class="nf">__tostring</span><span class="p">()</span>
+        <span class="kr">return</span> <span class="s1">&#39;{&#39;</span> <span class="o">..</span> <span class="n">self</span><span class="p">:</span><span class="n">map</span><span class="p">(</span><span class="n">ml</span><span class="p">.</span><span class="n">tstring</span><span class="p">):</span><span class="n">concat</span> <span class="s1">&#39;,&#39;</span> <span class="o">..</span> <span class="s1">&#39;}&#39;</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">.</span><span class="nf">__eq</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)</span>
+        <span class="kr">if</span> <span class="o">#</span><span class="n">l1</span> <span class="o">~=</span> <span class="o">#</span><span class="n">l2</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">false</span> <span class="kr">end</span>
+        <span class="kr">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">l1</span> <span class="kr">do</span>
+            <span class="kr">if</span> <span class="n">l1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">~=</span> <span class="n">l2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="kr">then</span> <span class="kr">return</span> <span class="kc">false</span> <span class="kr">end</span>
+        <span class="kr">end</span>
+        <span class="kr">return</span> <span class="kc">true</span>
+    <span class="kr">end</span>
+
+    <span class="kr">function</span> <span class="nc">Array</span><span class="p">.</span><span class="nf">__concat</span> <span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="n">set_class</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span><span class="n">extend</span><span class="p">({},</span><span class="n">l1</span><span class="p">,</span><span class="n">l2</span><span class="p">))</span>
+    <span class="kr">end</span>
+
+<span class="kr">end</span>
+
+<span class="n">ml</span><span class="p">.</span><span class="n">Array</span> <span class="o">=</span> <span class="n">Array</span>
+
+<span class="kr">return</span> <span class="n">ml</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

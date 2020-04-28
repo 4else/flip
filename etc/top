@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+q='"'
+r='https://github.com/duo101/flip/raw/master'
+s='http://git.io/FLIP'
+
+cat<<'EOF'>/tmp/maths$$
+<script 
+ src="https://kit.fontawesome.com/7abee6b155.js" 
+ crossorigin="anonymous"></script>
+<script 
+ src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script 
+ id=MathJax-script async 
+ src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                  inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                  processEscapes: true
+            }
+        });
+</script>
+EOF
+
+cat<<'EOF'>/tmp/forks$$
+<div class="ribbon">
+  <a href="#">Fork me on GitHub</a>
+</div>
+EOF
+
+
+cat<<'EOF'>/tmp/button$$
+<center>
+<br><a href="https://www.lua.org"><img 
+      src=https://img.shields.io/badge/language-lua-orange></a>
+<img  src=https://img.shields.io/badge/purpose-teach,ai,se-blueviolet> 
+<img  src=https://img.shields.io/badge/platform-mac,*nux-informational> 
+<a    href="https://travis-ci.org/timm/lua"><img 
+      src=https://travis-ci.org/timm/lua.svg?branch=master></a>
+EOF
+
+
+cat<<EOF> /tmp/heads$$
+<br>
+1 | b | c d
+e | f  g
+<hr>
+</center>
+EOF
+
+#if [ $0 -nt $1 ]; then
+  echo "# $1 ..."
+  cat $1 | gawk '
+  BEGIN  {
+    forks=  "'/tmp/forks$$'"
+    heads=  "'/tmp/heads$$'"
+    maths=  "'/tmp/maths$$'"
+    buttons=  "'/tmp/button$$'"
+    RS=""
+    getline head < heads
+    getline math < maths
+    getline fork < forks
+    getline button < buttons
+    close(heads)
+    close(maths)
+    close(forks)
+    close(buttons)
+    RS="\n"
+  }
+  /^<\/head>/         { print math }
+  /<h1>/          { print fork;print "&nbsp;<p>&nbsp;<p>"$0; next }
+  /<div class=.octowrap.>/ && head {  print button head; head="";}
+  #/<p>/ && button  { print button head; button="" }
+                   { print }
+
+  ' > /tmp/$$new
+
+  cp /tmp/$$new $1
+
+#fi

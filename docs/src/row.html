@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>row.lua</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>row.lua</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="col.html">
+                    ./src/col.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="data.html">
+                    ./src/data.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="flip.html">
+                    ./src/flip.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="lib.html">
+                    ./src/lib.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ml.html">
+                    ./src/ml.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="num.html">
+                    ./src/num.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="row.html">
+                    ./src/row.lua
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="sym.html">
+                    ./src/sym.lua
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="hljs-built_in">require</span> <span class="hljs-string">"flip"</span>
+
+Row = class()
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Row:_init</span><span class="hljs-params">(cells)</span></span> <span class="hljs-built_in">self</span>.cells=cells <span class="hljs-keyword">end</span>
+  
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Row:dist</span><span class="hljs-params">(other,cols,p,    n,d,x,y,d0)</span></span> 
+  p=p <span class="hljs-keyword">or</span> the.dist.p
+  n,d = <span class="hljs-number">0</span>,<span class="hljs-number">0</span>
+  <span class="hljs-keyword">for</span> pos,col <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(cols) <span class="hljs-keyword">do</span>
+    n = n +<span class="hljs-number">1</span>
+    x = <span class="hljs-built_in">self</span>.cells[pos]
+    y = other.cells[pos]
+    d0= col:dist(x,y)
+    d = d + d0^p
+  <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">return</span> (d / n) ^ (<span class="hljs-number">1</span>/p)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Row:dominates</span><span class="hljs-params">(other,cols,    s1,s2,n,x,y,x1,y1)</span></span>
+   s1,s2,n =  <span class="hljs-number">0</span>,<span class="hljs-number">0</span>,#cols
+   <span class="hljs-keyword">for</span> pos,col <span class="hljs-keyword">in</span> <span class="hljs-built_in">pairs</span>(cols) <span class="hljs-keyword">do</span>
+     x  = <span class="hljs-built_in">self</span>.cells[pos]
+     y  = other.cells[pos]
+     x1 = col.norm(x)
+     y1 = col.norm(y)
+     s1 = s1 - <span class="hljs-number">10</span>^(col.w*(x1-y1)/n)
+     s2 = s2 - <span class="hljs-number">10</span>^(col.w*(y1-x1)/n)
+   <span class="hljs-keyword">end</span>
+  <span class="hljs-keyword">return</span> s1/n &lt; s2/n 
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">return</span> Row</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
