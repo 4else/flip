@@ -1,3 +1,13 @@
+----------------------
+-- Showing off Colon mode.
+-- If you hate @ tags, you can use colons. However, you need to specify colon
+-- mode explicitly -C or --colon, or `colon=true` in the config.ld. Be careful
+-- not to use a colon followed by a space for any other purpose!
+--
+-- So the incantation in this case is `ldoc -C colon.lua`.
+
+-- module: flip 
+
 function the0() return {
   data  = "../data/",
   ignore= "?",

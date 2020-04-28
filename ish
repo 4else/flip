@@ -186,6 +186,7 @@ vimrc() { cat<<-'EOF'
 "	Plugin 'drmingdrmer/vim-tabbar'
 	Plugin 'ap/vim-buftabline'
 	Plugin 'junegunn/fzf.vim'
+	Plugin 'tomtom/tcomment_vim'
 	Plugin 'jnurmine/Zenburn'
 	Plugin 'altercation/vim-colors-solarized'
 	Plugin 'seebi/dircolors-solarized'
@@ -278,7 +279,7 @@ bashrc() { cat<<-'EOF'
 AFTER=1
 #brew install bsdgames-osx
 
-for c in gawk git tmux vim mc tree cmatrix rain npm lua ncdu; do
+for c in gawk git tmux vim mc tree cmatrix rain npm lua pycco ncdu; do
   if [ -z "$(which $c)" ]; then
     AFTER=""
     echo "#E> missing: $c"

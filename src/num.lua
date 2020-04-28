@@ -1,5 +1,14 @@
 require "flip"
 
+--[[
+
+#  asdasd
+ asdas
+ - asda
+ - asdas
+ - asdasa
+--]]
+
 local Num=class(require "col")
 
 function Num:_init(txt,pos)
@@ -10,6 +19,8 @@ function Num:_init(txt,pos)
   self.hi  = math.mininteger
   self.lo  = math.maxinteger
 end
+
+-- Anohter
 
 function Num:__tostring()
   return string.format("Num(%s,%s)", self.mu, self.sd)

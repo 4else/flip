@@ -1,4 +1,3 @@
-
 -----------------
 -- Microlight - a very compact Lua utilities module
 --

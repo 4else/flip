@@ -1,3 +1,6 @@
+------------
+-- module: Col
+
 require "flip"
 
 local Col = class()
