@@ -38,17 +38,16 @@ function lib.csv(file, todo)
   end
   --------- --------- -------- ---------- ---------  
   local stream = file and io.input(file) or io.input()
-  local n,l    = -1,io.read()
+  local l    = io.read()
   return function()
     if l then
-      l = l:gsub("[\t\r ]*","")
-           :gsub("#.*","")
+      l = l:gsub("[\t\r ]*","") -- no whitespace
+           :gsub("#.*","")      -- no comments
       local l1 = lib.split(l)
       l = io.read()
       if #l1 > 0 then 
-        n=n+1; 
         if todo==nil then todo=what2use(l1) end
-        return n, use(l1, todo) 
+        return use(l1, todo) 
       end
     else
       io.close(stream) end end   
