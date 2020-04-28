@@ -2,6 +2,7 @@ function the0() return {
   data  = "../data/",
   ignore= "?",
   sep=    ",",
+  dist=   { p = 2},
   rand=   { seed = 1}, 
   ok=     { pass= 0, 
             fail= 0},

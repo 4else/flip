@@ -11,6 +11,12 @@ function Sym:_init(txt,pos)
   self.nk     = 0
 end
 
+function Sym:__tostring()
+  return string.format("Sym(%s,%s,%s)", 
+                       self.txt,self.mode, self.most)
+end
+
+
 function Sym:add (x)
   if x ~= the.ch.skip then 
     self._ent = nil 
