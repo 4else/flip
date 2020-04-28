@@ -7,35 +7,46 @@ function lib.split(s, sep,    t,notsep)
   return t
 end
 
-function lib.o(t,    indent  )
-  indent = indent or 0
-  if indent < 10 then
-    for k, v in pairs(t) do
-      if not (type(k)=='string' and k:match("^_")) then
-        local fmt = string.rep("|  ", indent) .. k .. ": "
-        if type(v) == "table" then
-          print(fmt)
-          lib.o(v, indent+1)
-        else
-          print(fmt .. tostring(v)) end end end end
-end
-
-function lib.csv(file)
+function lib.csv(file, todo)
+  local function what2use(row, out, put)
+    out, put = {},0
+    for get,txt in pairs(row) do
+      if string.sub(txt, 1,1) ~= the.ch.skip then
+        put      = put + 1
+        out[put] = get 
+    end end
+    return out
+  end
+  --------- --------- -------- ---------- ---------  
+  local function use(row, what2do, out, cell)
+    out = {}
+    for put,get in pairs(what2do) do 
+      cell = row[get]
+      cell = tonumber(cell) or cell
+      out[put] = cell end
+    return out
+  end
+  --------- --------- -------- ---------- ---------  
   local stream = file and io.input(file) or io.input()
-  local l      = io.read()
+  local n,l    = -1,io.read()
   return function()
     if l then
       l = l:gsub("[\t\r ]*","")
            :gsub("#.*","")
       local l1 = lib.split(l)
-      for k,v in pairs(l1) do l1[k] = tonumber(v) or v end
       l = io.read()
-      if #l1 > 0 then return l1 end
+      if #l1 > 0 then 
+        n=n+1; 
+        if todo==nil then todo=what2use(l1) end
+        return n, use(l1, todo) 
+      end
     else
       io.close(stream) end end   
 end
 
-function lib:dump(t)
+function lib.cat(t,s) return table.concat(t,s or ", ") end
+
+function lib.dump(t)
    if type(t) ~= 'table' then return tostring(o) end
    local s = '{ '
    for k,v in pairs(t) do

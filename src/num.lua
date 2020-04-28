@@ -1,7 +1,6 @@
 require "flip"
-Col = require "col"
 
-local Num=class(Col)
+local Num=class(require "col")
 
 function Num:_init(txt,pos)
   self:super(txt,pos)
@@ -10,6 +9,10 @@ function Num:_init(txt,pos)
   self.sd  = 0
   self.hi  = math.mininteger
   self.lo  = math.maxinteger
+end
+
+function Num:__tostring()
+  return string.format("Num(%s,%s)", self.mu, self.sd)
 end
 
 function Num:add (x)
@@ -30,6 +33,10 @@ function Num:sd0()
   if self.n  < 2 then return 0 end
   if self.m2 < 0 then return 0 end
   return (self.m2 / (self.n - 1))^0.5 
+end
+
+function Num:norm(x)
+ 
 end
 
 return Num

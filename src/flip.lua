@@ -72,3 +72,18 @@ function ok(t)
   end 
   rogues()
 end
+
+function o(t,    indent  )
+  indent = indent or 0
+  if indent < 10 then
+    for k, v in pairs(t) do
+      if not (type(k)=='string' and k:match("^_")) then
+        local fmt = string.rep("|  ", indent) .. k .. ": "
+        if type(v) == "table" then
+          print(fmt)
+          o(v, indent+1)
+        else
+          print(fmt .. tostring(v)) end end end end
+end
+ 
+

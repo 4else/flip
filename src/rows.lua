@@ -1,30 +1,40 @@
-local ml  = require "ml"
+require "flip"
 local lib = require "lib"
+local Num = require "Num"
+local Sym = require "Sym"
 
-tbl = ml.class()
-num = ml.class()
-sym = ml.class()
+local function c(s,k) 
+  return string.sub(s,1,1) == the.ch[k] end
 
-function tbl:_init()
-  self.cols = {}
+local Rows=class(require "col")
+
+function Rows:_init()
+  self.rows, self.cols = {},{}
 end
 
-function tbl:read(file, f0,f)
-  local stream = file and io.input(file) or io.input()
-  local first,line = true,io.read()
-  while line do
-    line= line:gsub("[\t\r ]*","")
-              :gsub("#.*","")
-    local cells = lib.split(line)
-    line = io.read()
-    if #cells > 0 then
-      if first then f0(cells) else f(cells) end end
-      first = false
-  end 
-  io.close(stream)
-  return t
+function Rows:read(f)
+  for n,row in lib.csv(f) do
+    if n==0 then self:head(row) else self:add(row) end end
 end
 
-lib.rogues()
+function Rows:klassp(x) return c(x,"klass") end 
+function Rows:goalp(x) return c(x,"less") or c(x,"more") end
+function Rows:nump(x) return c(x,"num") or self:goalp(x) end
+function Rows:yp(x) return self:klassp(x) or self:goalp(x) end
 
-return tbl
+function Rows:xp(x)     return not self:yp(x) end
+function Rows:symp(x)   return not self:nump(x) end
+
+function Rows:head(t,  col)
+  for k,v in pairs(t) do
+    col = self:nump(v) and Num or Sym
+    self.cols[k] = col(k,v) end
+end
+
+function Rows:add(t)
+  for k,v in pairs(t) do self.cols[k]:add(v) end
+  self.rows[#self.rows+1] = t
+end
+
+
+return Rows
