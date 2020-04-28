@@ -257,8 +257,9 @@ bashrc() { cat<<-'EOF'
  
 	k()  { f="$*"; shift; coffee $f.coffee.md $*; }
 	f()  { $root/gold $1.gold $*; }
-	coffee0() {
-	    sudo -H npm install --global coffeescript
+	doc() {
+	    (cd $root
+		pycco -d docs `ls ./src/*.lua | grep -v ok.lua` )
 	}
 	publish() {
 		find $root -name '*.md' -exec $root/etc/top {} \;
