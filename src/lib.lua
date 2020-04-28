@@ -1,7 +1,5 @@
 local lib={}
 
-lib.data = "../../etc/data"
-
 function lib.split(s, sep,    t,notsep)
   t, sep = {}, sep or ","
   notsep = "([^" ..sep.. "]+)"
@@ -22,19 +20,19 @@ function lib.o(t,    indent  )
           print(fmt .. tostring(v)) end end end end
 end
 
-function lib.csv(file,f,f1)
+function lib.csv(file)
   local stream = file and io.input(file) or io.input()
-  local line   = io.read()
-  while line do
-    line= line:gsub("[\t\r ]*","")
-              :gsub("#.*","")
-    local cells = lib.split(line)
-    line = io.read()
-    if #cells > 0 then
-      f(cells) 
-      f=f1
-  end 
-  io.close(stream)
+  local l      = io.read()
+  return function()
+    if l then
+      l = l:gsub("[\t\r ]*","")
+           :gsub("#.*","")
+      local l1 = lib.split(l)
+      for k,v in pairs(l1) do l1[k] = tonumber(v) or v end
+      l = io.read()
+      if #l1 > 0 then return l1 end
+    else
+      io.close(stream) end end   
 end
 
 function lib:dump(t)
