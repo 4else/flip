@@ -20,11 +20,14 @@ function Num:_init(txt,pos)
   self.lo  = math.maxinteger
 end
 
--- Anohter
+function Num:mid()  return self.mu end
+function Num:var()  return self.sd end
+function Num:show() return (w<0 and"<"or">")..self:mid() end
 
 function Num:__tostring()
   return string.format("Num(%s,%s)", self.mu, self.sd)
 end
+
 
 function Num:add (x)
   if x ~= the.ch.skip then 

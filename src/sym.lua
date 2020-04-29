@@ -16,6 +16,9 @@ function Sym:__tostring()
                        self.txt,self.mode, self.most)
 end
 
+function Sym:mid()  return self.mode end
+function Sym:var()  return self:ent() end
+function Sym:show() return self:mid() end
 
 function Sym:add (x)
   if x ~= the.ch.skip then 

@@ -10,50 +10,48 @@
 
 local lib={}
 
+function lib.cat(t,s) return table.concat(t,s or ", ") end
+
+function lib.any(l) return l[math.random(1,#l)] end
+
+function lib.map(t,f, out)
+  out={}
+  f =  f and f or function(z) return z end
+  if t then for i,v in pairs(t) do out[i] = f(v) end  end
+  return out
+end
+
+function lib.copy(t)  
+  return type(t) ~= 'table' and t or lib.map(t,lib.copy)
+end
+
+function lib.sort(t,k)
+  f = k and (function(x,y) return x[k] < y[k] end) 
+        or  (function(x,y) return x < y end)
+  table.sort(t,f)
+  return t
+end
+
+function lib.keys(t,k)  
+  return lib.copy(f,function(z) return z[k] end)
+end
+
+function lib.rpad(s,n)
+  s = tostring(s)
+  return  s .. string.rep(" ",n - #s) 
+end
+
+function lib.lpad(s,n)
+  s = tostring(s)
+  return  string.rep(" ",n - #s) .. s
+end
+
 function lib.split(s, sep,    t,notsep)
   t, sep = {}, sep or ","
   notsep = "([^" ..sep.. "]+)"
   for y in string.gmatch(s, notsep) do t[#t+1] = y end
   return t
 end
-
-function lib.csv(file, todo)
-  local function what2use(row, out, put)
-    out, put = {},0
-    for get,txt in pairs(row) do
-      if string.sub(txt, 1,1) ~= the.ch.skip then
-        put      = put + 1
-        out[put] = get 
-    end end
-    return out
-  end
-  --------- --------- -------- ---------- ---------  
-  local function use(row, what2do, out, cell)
-    out = {}
-    for put,get in pairs(what2do) do 
-      cell = row[get]
-      cell = tonumber(cell) or cell
-      out[put] = cell end
-    return out
-  end
-  --------- --------- -------- ---------- ---------  
-  local stream = file and io.input(file) or io.input()
-  local l    = io.read()
-  return function()
-    if l then
-      l = l:gsub("[\t\r ]*","") -- no whitespace
-           :gsub("#.*","")      -- no comments
-      local l1 = lib.split(l)
-      l = io.read()
-      if #l1 > 0 then 
-        if todo==nil then todo=what2use(l1) end
-        return use(l1, todo) 
-      end
-    else
-      io.close(stream) end end   
-end
-
-function lib.cat(t,s) return table.concat(t,s or ", ") end
 
 function lib.dump(t)
    if type(t) ~= 'table' then return tostring(o) end

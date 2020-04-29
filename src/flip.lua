@@ -9,10 +9,14 @@
 -- module: flip 
 
 function the0() return {
-  data  = "../data/",
+  csv  = "../data/",
   ignore= "?",
   sep=    ",",
-  dist=   { p = 2},
+  tiny=   1/math.maxinteger,
+  data =   { p      = 2,
+             sample = 128,
+             data   = .5,
+             far    = .9},
   rand=   { seed = 1}, 
   ok=     { pass= 0, 
             fail= 0},
@@ -72,8 +76,9 @@ function ok(t)
   for s,x in pairs(t) do  
     print("# test:", s) 
     the.ok.pass = the.ok.pass + 1
-    local t1= os.clock()
-    the =the0()
+    local t1 = os.clock()
+    the      = the0()
+    math.randomseed(the.rand.seed)
     local passed,err = pcall(x) 
     local t2= os.clock()
     print(string.format ("%8.6f secs", t2-t1))

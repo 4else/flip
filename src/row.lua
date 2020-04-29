@@ -1,8 +1,10 @@
 require "flip"
 
-Row = class()
+local Row = class()
 
-function Row:_init(cells) self.cells=cells end
+function Row:_init(cells) 
+  self.cells = cells 
+end
   
 function Row:dist(other,cols,p,    n,d,x,y,d0) 
   p=p or the.dist.p
