@@ -42,7 +42,7 @@ EOF
 
 cat<<EOF> /tmp/heads$$
 <br>
-<a href="index.html">Home</a> | 
+<a href="INDEX.html">Home</a> | 
 <a href="https://github.com/duo101/flip/blob/master/LICENSE.md">License</a> | 
 <a href="https://github.com/duo101/flip/blob/master/CONTRIBUTING.md">Contribute</a> | 
 <a href="https://github.com/duo101/flip/issues">Issues</a>  
