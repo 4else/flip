@@ -1,5 +1,5 @@
 require "flip"
-local csv,select, wanted,splits
+local csv, csvWant.csvTake, select
 
 -- Return an iterator that returns all non-blank
 -- lines, divided into cells (coerced to numbers,
@@ -60,7 +60,10 @@ function split(s,     sep,out)
     out[#out+1] = y end
   return out
 end
-
 -- ----------------
 -- ## Export 
 return csv
+
+-- ----------------
+-- ## Author 
+Tim Menzies, April 2020.
