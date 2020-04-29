@@ -30,7 +30,6 @@ cat<<'EOF'>/tmp/forks$$
 </div>
 EOF
 
-
 cat<<'EOF'>/tmp/button$$
 <center>
 <br><a href="https://www.lua.org"><img 
@@ -41,11 +40,11 @@ cat<<'EOF'>/tmp/button$$
       src=https://travis-ci.org/timm/lua.svg?branch=master></a>
 EOF
 
-
 cat<<EOF> /tmp/heads$$
 <br>
 <a href="index.html">Home</a> | 
-<a href="license.html">License</a> | 
+<a href="https://github.com/duo101/flip/blob/master/LICENSE.md">license</a> | 
+<a href="https://github.com/duo101/flip/blob/master/CONTRIBUTING.md">Contribute</a> | 
 <a href="https://github.com/duo101/flip/issues">Issues</a>  
 <hr>
 </center>
