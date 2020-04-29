@@ -44,8 +44,9 @@ EOF
 
 cat<<EOF> /tmp/heads$$
 <br>
-1 | b | c d
-e | f  g
+<a href="index.html">Home</a> | 
+<a href="license.html">License</a> | 
+<a href="https://github.com/duo101/flip/issues">Issues</a>  
 <hr>
 </center>
 EOF

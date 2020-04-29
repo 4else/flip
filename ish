@@ -184,9 +184,9 @@ vimrc() { cat<<-'EOF'
 	Plugin 'junegunn/fzf'
 "	Plugin 'humiaozuzu/tabbar'
 "	Plugin 'drmingdrmer/vim-tabbar'
+	Plugin 'tomtom/tcomment_vim'
 	Plugin 'ap/vim-buftabline'
 	Plugin 'junegunn/fzf.vim'
-	Plugin 'tomtom/tcomment_vim'
 	Plugin 'jnurmine/Zenburn'
 	Plugin 'altercation/vim-colors-solarized'
 	Plugin 'seebi/dircolors-solarized'
@@ -259,10 +259,10 @@ bashrc() { cat<<-'EOF'
 	f()  { $root/gold $1.gold $*; }
 	doc() {
 	    (cd $root
-		pycco -d docs `ls ./src/*.lua | grep -v ok.lua` )
-   cd docs
-   cp ../etc/pycco.css .
-   for i in *.html; do ../etc/top $i; done
+		pycco -d $root/docs `ls $root/src/*.lua | grep -v ok.lua` )
+   		cd $root/docs
+   		cp $root/etc/pycco.css .
+   		for i in *.html; do $root/etc/top $i; done
 	}
 	publish() {
 		find $root -name '*.md' -exec $root/etc/top {} \;
