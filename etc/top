@@ -43,7 +43,7 @@ EOF
 cat<<EOF> /tmp/heads$$
 <br>
 <a href="index.html">Home</a> | 
-<a href="https://github.com/duo101/flip/blob/master/LICENSE.md">license</a> | 
+<a href="https://github.com/duo101/flip/blob/master/LICENSE.md">License</a> | 
 <a href="https://github.com/duo101/flip/blob/master/CONTRIBUTING.md">Contribute</a> | 
 <a href="https://github.com/duo101/flip/issues">Issues</a>  
 <hr>
@@ -69,10 +69,10 @@ EOF
     close(buttons)
     RS="\n"
   }
-  /^<\/head>/         { print math }
-  /<h1>/          { print fork;print "&nbsp;<p>&nbsp;<p>"$0; next }
-  /<div class=.octowrap.>/ && head {  print button head; head="";}
-  #/<p>/ && button  { print button head; button="" }
+  /^<\/head>/      { print math }
+  /<h1>/           { print fork;print "&nbsp;<p>&nbsp;<p>"$0; next }
+  /<div class=.octowrap.>/ && head { print button head; head="";}
+  #/<p>/ && button { print button head; button="" }
                    { print }
 
   ' > /tmp/$$new
