@@ -27,7 +27,7 @@ function csv(file,     want)
 end
 
 -- ----------------
--- ## Support code
+-- ## Support 
 
 -- Determine what we want. 
 function csvWant(row,    out,put)
@@ -62,5 +62,5 @@ function split(s,     sep,out)
 end
 
 -- ----------------
--- ## Export control
+-- ## Export 
 return csv
