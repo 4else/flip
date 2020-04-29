@@ -4,12 +4,10 @@ local csv,select, wanted,splits
 -- Return an iterator that returns all non-blank
 -- lines, divided into cells (coerced to numbers,
 -- if need be), with all white space and comments removed.
-
 -- Also, 
 -- skip over any column whose name starts with `the.ch.skip`
 -- character (which defaults to `?`).
-
--- This iterator reads from `file` or, if that is absent,
+-- Note that this iterator reads from `file` or, if that is absent,
 -- from standard input.
 function csv(file,     want)
   local stream = file and io.input(file) or io.input()
