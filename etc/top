@@ -75,7 +75,7 @@ EOF
     RS="\n"
   }
   /^<\/head>/      { print math }
-  /<h1>/           { sub(/<h1>/,"<h1>DUO: ") ;print fork;print $0 ; next }
+  /<h1>/           { sub(/<h1>/,"<h1>\\&nbsp;DUO: ") ;print fork;print $0 ; next }
   /<div class=.octowrap.>/ && head { print head button; head="";}
   #/<p>/ && button { print head button; button="" }
                    { print }

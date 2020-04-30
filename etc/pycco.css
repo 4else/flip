@@ -76,7 +76,8 @@ div.docs {
   max-width: 500px;
   min-width: 500px;
   min-height: 5px;
-  padding: 10px 25px 1px 50px;
+  /*---- padding: 10px 25px 1px 50px; ---*/
+  padding: 10px 25px 1px 30px;
   vertical-align: top;
   text-align: left;
 }
@@ -116,7 +117,8 @@ div.docs {
       }
 div.code {
   margin-left: 580px;
-  padding: 14px 15px 16px 50px;
+  /*---- padding: 14px 15px 16px 50px; ----*/
+  padding: 14px 20px 16px 20px;
   vertical-align: top;
 }
   .code pre, .docs p code {
