@@ -7,8 +7,22 @@ local csv, csvWant.csvTake, select
 -- Also, 
 -- skip over any column whose name starts with `the.ch.skip`
 -- character (which defaults to `?`).
--- Note that this iterator reads from `file` or, if that is absent,
--- from standard input.
+-- Example usage:
+--   
+--     csv = require("csv")
+--     
+--     for line in csv("data.csv") do
+--       print(line)
+--     end
+--
+-- Note that:
+--
+-- - File processing is incremental (one
+--   line at a time) without loading the file into RAM. 
+-- - This iterator reads from `file` or, if that is absent,
+--   from standard input. 
+
+
 function csv(file,     want)
   local stream = file and io.input(file) or io.input()
   local tmp    = io.read()
@@ -26,7 +40,7 @@ function csv(file,     want)
       io.close(stream) end end   
 end
 
--- ----------------
+
 -- ## Support 
 
 -- Determine what we want. 
@@ -60,10 +74,10 @@ function split(s,     sep,out)
     out[#out+1] = y end
   return out
 end
--- ----------------
--- ## Export 
+
+-------------
+-- ## Export control 
 return csv
 
--- ----------------
 -- ## Author 
-Tim Menzies, April 2020.
+-- Tim Menzies, April 2020.
