@@ -1,14 +1,4 @@
 require "flip"
-
---[[
-
-#  asdasd
- asdas
- - asda
- - asdas
- - asdasa
---]]
-
 local Num=class(require "col")
 
 function Num:_init(txt,pos)

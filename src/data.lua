@@ -1,6 +1,7 @@
 require "flip"
 local lib  = require "lib"
 local csv  = require "csv"
+local Row  = require "row"
 local Cols = require "cols"
 local Data = class()
 
@@ -10,9 +11,10 @@ local Data = class()
 -- ## Creation and Updates
 
 function Data:_init(header)   
-  self.p   =  the.data.p 
-  self.rows = {}
-  self.cols = nil
+  self.p     = the.data.p 
+  self._some = {}
+  self.rows  = {}
+  self.cols  = nil
   if header then self:header(header) end
 end
 
@@ -49,6 +51,11 @@ function Data:klass()
 function Data:klassVal(row) 
   local klass=self:klass()
   return row.cells[klass.pos]
+end
+
+function Data:some(x)
+  self._some[x] = self._some[x] or self.cols:some(x)
+  return self._some[x]
 end
 
 -- Get the `dist` between two rows.

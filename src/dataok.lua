@@ -1,11 +1,10 @@
 require "flip"
-
 Data=require "data"
 
-r=Data()
-r:read(the.data .. 'weather4.csv')
-o(r.cols)
-
-for k,v in pairs(r:p("xsymp")) do
-  print(100,k,v)
-end
+ok{some = function (  r,t)
+  r = Data()
+  r:read(the.csv .. 'weather4.csv')
+  t= r:some("x")
+  assert( t[ 1].txt == "outlook" )
+  assert( t[#t].txt == "wind" )
+end}

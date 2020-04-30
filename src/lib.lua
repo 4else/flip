@@ -10,7 +10,6 @@
 
 local lib={}
 
-function lib.cat(t,s) return table.concat(t,s or ", ") end
 
 function lib.any(l) return l[math.random(1,#l)] end
 
@@ -21,19 +20,28 @@ function lib.map(t,f, out)
   return out
 end
 
+function lib.reject(t,f)
+  return lib.select(t, function (z) return not f(z) end) end
+
+function lib.select(t,f, out)
+  out={}
+  for _,v in pairs(t) do 
+    if f(v) then out[#out+1] = v  end end
+  return out
+end
+
 function lib.copy(t)  
   return type(t) ~= 'table' and t or lib.map(t,lib.copy)
 end
 
-function lib.sort(t,k)
-  f = k and (function(x,y) return x[k] < y[k] end) 
-        or  (function(x,y) return x < y end)
+function lib.sort(t,f)
+  if type(f) == "string" then
+    return lib.sort(t, function(x,y) return x[f]<y[f] end) 
+  elseif not f then
+    return lib.sort(t, function(x,y) return x< y end) 
+  end
   table.sort(t,f)
   return t
-end
-
-function lib.keys(t,k)  
-  return lib.copy(f,function(z) return z[k] end)
 end
 
 function lib.rpad(s,n)

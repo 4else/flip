@@ -1,5 +1,5 @@
 require "flip"
-local csv, csvWant.csvTake, select
+local csv, csvWant, csvTake, select
 
 -- Return an iterator that returns all non-blank
 -- lines, divided into cells (coerced to numbers,
@@ -23,17 +23,16 @@ local csv, csvWant.csvTake, select
 --   from standard input. 
 
 
-function csv(file,     want)
-  local stream = file and io.input(file) or io.input()
-  local tmp    = io.read()
+function csv(file,     want,stream,tmp,row)
+  stream = file and io.input(file) or io.input()
+  tmp    = io.read()
   return function()
     if tmp then
       tmp = tmp:gsub("[\t\r ]*","") -- no whitespace
-               :gsub("#.*","")      -- no comments
-      local row = split(tmp)
+      row = split(tmp)
       tmp = io.read()
       if #row > 0 then 
-        want = want or csvWant(row) -- only do this first time
+        want = want or csvWant(row) -- only do first time
         return csvTake(want,row) 
       end
     else

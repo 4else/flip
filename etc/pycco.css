@@ -86,7 +86,13 @@ div.docs {
     font-size: 13px;
     font-weight: bold;
   }
-  .docs p tt, .docs p code {
+  .docs li code {
+    background: #f8f8ff;
+    border: 1px solid #dedede;
+    font-size: 12px;
+    padding: 0 0.2em;
+  }
+ .docs p tt, .docs p code {
     background: #f8f8ff;
     border: 1px solid #dedede;
     font-size: 12px;
@@ -114,7 +120,7 @@ div.code {
   vertical-align: top;
 }
   .code pre, .docs p code {
-    font-size: 14px;
+    font-size: 13px;
   }
     pre, tt, code {
       line-height: 18px;

@@ -72,22 +72,26 @@ local function rogues()
         print("-- ROGUE local ["..k.."]") end end end
 end
 
+function nok(t) return true end
+
 function ok(t)
   for s,x in pairs(t) do  
-    print("# test:", s) 
+    io.write("-- test : ".. s) 
     the.ok.pass = the.ok.pass + 1
     local t1 = os.clock()
     the      = the0()
     math.randomseed(the.rand.seed)
     local passed,err = pcall(x) 
     local t2= os.clock()
-    print(string.format ("%8.6f secs", t2-t1))
+    print(string.format (" : %8.6f secs", t2-t1))
     if not passed then   
       the.ok.fail = the.ok.fail + 1
       print("Failure: ".. err) end 
   end 
   rogues()
 end
+
+function oo(t) print(table.concat(t,", ")) end
 
 function o(t,    indent  )
   indent = indent or 0
@@ -101,5 +105,9 @@ function o(t,    indent  )
         else
           print(fmt .. tostring(v)) end end end end
 end
- 
+
+function near(x,y,z)
+  z= z or 0.01
+  assert(math.abs(x - y) <= z)
+end
 
