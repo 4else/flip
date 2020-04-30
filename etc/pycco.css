@@ -120,7 +120,7 @@ div.code {
   vertical-align: top;
 }
   .code pre, .docs p code {
-    font-size: 13px;
+    font-size: 12px;
   }
     pre, tt, code {
       line-height: 18px;
