@@ -49,7 +49,6 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
     </div>
     <div class='code'>
       <div class="highlight"><pre><span></span><span class="nb">require</span> <span class="s2">&quot;flip&quot;</span>
-
 <span class="kd">local</span> <span class="n">Sym</span><span class="o">=</span><span class="n">class</span><span class="p">(</span><span class="nb">require</span> <span class="s2">&quot;col&quot;</span><span class="p">)</span>
 
 <span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">_init</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span>
@@ -70,16 +69,15 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
 <span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">var</span><span class="p">()</span>  <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">ent</span><span class="p">()</span> <span class="kr">end</span>
 <span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">show</span><span class="p">()</span> <span class="kr">return</span> <span class="n">self</span><span class="p">:</span><span class="n">mid</span><span class="p">()</span> <span class="kr">end</span>
 
-<span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">add</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">add</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span>     <span class="n">seen</span><span class="p">)</span>
   <span class="kr">if</span> <span class="n">x</span> <span class="o">~=</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span> 
     <span class="n">self</span><span class="p">.</span><span class="n">_ent</span> <span class="o">=</span> <span class="kc">nil</span> 
-    <span class="n">self</span><span class="p">.</span><span class="n">n</span>    <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">self</span><span class="p">.</span><span class="n">n</span>    <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="kr">if</span> <span class="ow">not</span> <span class="n">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="kr">then</span>
       <span class="n">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
       <span class="n">self</span><span class="p">.</span><span class="n">nk</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">nk</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="kr">end</span>
-    <span class="kd">local</span> <span class="n">seen</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">self</span><span class="p">.</span><span class="n">counts</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">seen</span> 
     <span class="kr">if</span> <span class="n">seen</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">most</span> <span class="kr">then</span>
       <span class="n">self</span><span class="p">.</span><span class="n">most</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">seen</span><span class="p">,</span> <span class="n">x</span> <span class="kr">end</span> 
@@ -87,15 +85,16 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
   <span class="kr">return</span> <span class="n">x</span>
 <span class="kr">end</span>
 
-<span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">ent</span><span class="p">()</span>
+<span class="kr">function</span> <span class="nc">Sym</span><span class="p">:</span><span class="nf">ent</span><span class="p">(</span>    <span class="n">e</span><span class="p">,</span><span class="n">p</span><span class="p">)</span>
   <span class="kr">if</span> <span class="n">self</span><span class="p">.</span><span class="n">_ent</span> <span class="o">==</span> <span class="kc">nil</span> <span class="kr">then</span> 
-    <span class="kd">local</span> <span class="n">e</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="kr">for</span> <span class="n">_</span><span class="p">,</span><span class="n">f</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">counts</span><span class="p">)</span> <span class="kr">do</span>
       <span class="kr">if</span> <span class="n">f</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="kr">then</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span> <span class="o">-</span> <span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">self</span><span class="p">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="nb">math.log</span><span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">i</span><span class="p">.</span><span class="n">n</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="kr">end</span> <span class="kr">end</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">f</span><span class="o">/</span><span class="n">self</span><span class="p">.</span><span class="n">n</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">e</span> <span class="o">-</span> <span class="n">p</span><span class="o">*</span> <span class="nb">math.log</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="kr">end</span> <span class="kr">end</span>
     <span class="n">self</span><span class="p">.</span><span class="n">_ent</span> <span class="o">=</span> <span class="n">e</span>
   <span class="kr">end</span>
-  <span class="kr">return</span> <span class="n">i</span><span class="p">.</span><span class="n">_ent</span> 
+  <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_ent</span> 
 <span class="kr">end</span>
 
 <span class="kr">return</span> <span class="n">Sym</span>

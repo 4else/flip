@@ -149,22 +149,26 @@ not to use a colon followed by a space for any other purpose!</p>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-- ROGUE local [&quot;</span><span class="o">..</span><span class="n">k</span><span class="o">..</span><span class="s2">&quot;]&quot;</span><span class="p">)</span> <span class="kr">end</span> <span class="kr">end</span> <span class="kr">end</span>
 <span class="kr">end</span>
 
+<span class="kr">function</span> <span class="nf">nok</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">return</span> <span class="kc">true</span> <span class="kr">end</span>
+
 <span class="kr">function</span> <span class="nf">ok</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
   <span class="kr">for</span> <span class="n">s</span><span class="p">,</span><span class="n">x</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span>  
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# test:&quot;</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> 
+    <span class="nb">io.write</span><span class="p">(</span><span class="s2">&quot;-- test : &quot;</span><span class="o">..</span> <span class="n">s</span><span class="p">)</span> 
     <span class="n">the</span><span class="p">.</span><span class="n">ok</span><span class="p">.</span><span class="n">pass</span> <span class="o">=</span> <span class="n">the</span><span class="p">.</span><span class="n">ok</span><span class="p">.</span><span class="n">pass</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="kd">local</span> <span class="n">t1</span> <span class="o">=</span> <span class="nb">os.clock</span><span class="p">()</span>
     <span class="n">the</span>      <span class="o">=</span> <span class="n">the0</span><span class="p">()</span>
     <span class="nb">math.randomseed</span><span class="p">(</span><span class="n">the</span><span class="p">.</span><span class="n">rand</span><span class="p">.</span><span class="n">seed</span><span class="p">)</span>
     <span class="kd">local</span> <span class="n">passed</span><span class="p">,</span><span class="n">err</span> <span class="o">=</span> <span class="nb">pcall</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> 
     <span class="kd">local</span> <span class="n">t2</span><span class="o">=</span> <span class="nb">os.clock</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span> <span class="p">(</span><span class="s2">&quot;%8.6f secs&quot;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span> <span class="p">(</span><span class="s2">&quot; : %8.6f secs&quot;</span><span class="p">,</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">))</span>
     <span class="kr">if</span> <span class="ow">not</span> <span class="n">passed</span> <span class="kr">then</span>   
       <span class="n">the</span><span class="p">.</span><span class="n">ok</span><span class="p">.</span><span class="n">fail</span> <span class="o">=</span> <span class="n">the</span><span class="p">.</span><span class="n">ok</span><span class="p">.</span><span class="n">fail</span> <span class="o">+</span> <span class="mi">1</span>
       <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failure: &quot;</span><span class="o">..</span> <span class="n">err</span><span class="p">)</span> <span class="kr">end</span> 
   <span class="kr">end</span> 
   <span class="n">rogues</span><span class="p">()</span>
 <span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">oo</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="nb">table.concat</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="p">))</span> <span class="kr">end</span>
 
 <span class="kr">function</span> <span class="nf">o</span><span class="p">(</span><span class="n">t</span><span class="p">,</span>    <span class="n">indent</span>  <span class="p">)</span>
   <span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span> <span class="ow">or</span> <span class="mi">0</span>
@@ -177,6 +181,11 @@ not to use a colon followed by a space for any other purpose!</p>
           <span class="n">o</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">indent</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
         <span class="kr">else</span>
           <span class="nb">print</span><span class="p">(</span><span class="n">fmt</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="kr">end</span> <span class="kr">end</span> <span class="kr">end</span> <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nf">near</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>
+  <span class="n">z</span><span class="o">=</span> <span class="n">z</span> <span class="ow">or</span> <span class="mf">0.01</span>
+  <span class="nb">assert</span><span class="p">(</span><span class="nb">math.abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">z</span><span class="p">)</span>
 <span class="kr">end</span>
 
 </pre></div>

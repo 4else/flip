@@ -51,6 +51,7 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
       <div class="highlight"><pre><span></span><span class="nb">require</span> <span class="s2">&quot;flip&quot;</span>
 <span class="kd">local</span> <span class="n">lib</span>  <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;lib&quot;</span>
 <span class="kd">local</span> <span class="n">csv</span>  <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;csv&quot;</span>
+<span class="kd">local</span> <span class="n">Row</span>  <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;row&quot;</span>
 <span class="kd">local</span> <span class="n">Cols</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;cols&quot;</span>
 <span class="kd">local</span> <span class="n">Data</span> <span class="o">=</span> <span class="n">class</span><span class="p">()</span></pre></div>
     </div>
@@ -68,9 +69,10 @@ columns of that rows.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span> <span class="nc">Data</span><span class="p">:</span><span class="nf">_init</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>   
-  <span class="n">self</span><span class="p">.</span><span class="n">p</span>   <span class="o">=</span>  <span class="n">the</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">p</span> 
-  <span class="n">self</span><span class="p">.</span><span class="n">rows</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="n">self</span><span class="p">.</span><span class="n">cols</span> <span class="o">=</span> <span class="kc">nil</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">p</span>     <span class="o">=</span> <span class="n">the</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">p</span> 
+  <span class="n">self</span><span class="p">.</span><span class="n">_some</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">rows</span>  <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">cols</span>  <span class="o">=</span> <span class="kc">nil</span>
   <span class="kr">if</span> <span class="n">header</span> <span class="kr">then</span> <span class="n">self</span><span class="p">:</span><span class="n">header</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="kr">end</span>
 <span class="kr">end</span>
 
@@ -135,6 +137,11 @@ columns of that rows.</p>
       <div class="highlight"><pre><span class="kr">function</span> <span class="nc">Data</span><span class="p">:</span><span class="nf">klassVal</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> 
   <span class="kd">local</span> <span class="n">klass</span><span class="o">=</span><span class="n">self</span><span class="p">:</span><span class="n">klass</span><span class="p">()</span>
   <span class="kr">return</span> <span class="n">row</span><span class="p">.</span><span class="n">cells</span><span class="p">[</span><span class="n">klass</span><span class="p">.</span><span class="n">pos</span><span class="p">]</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nc">Data</span><span class="p">:</span><span class="nf">some</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">self</span><span class="p">.</span><span class="n">_some</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">_some</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="ow">or</span> <span class="n">self</span><span class="p">.</span><span class="n">cols</span><span class="p">:</span><span class="n">some</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="n">self</span><span class="p">.</span><span class="n">_some</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
 <span class="kr">end</span></pre></div>
     </div>
   </div>
