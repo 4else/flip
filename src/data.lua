@@ -42,7 +42,6 @@ end
 
 --------- --------- -------- ---------- ---------  ---------  
 -- ## Querying
-
 -- Get klass columm.
 function Data:klass() 
   return self.cols:some("klass")[1] end
