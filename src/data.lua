@@ -12,10 +12,11 @@ local Data = the.class()
 -- ## Creation and Updates
 
 function Data:_init(header)   
-  self.p     = the.data.p 
-  self.rows  = {}
-  self.cols  = nil
-  self._some = lib.cache(function (k)
+  self.p       = the.data.p 
+  self.rows    = {}
+  self.cols    = nil
+  self.samples = the.data.samples
+  self._some   =lib.cache(function (k)
                            return  self.cols:some(k) end)
   if header then self:header(header) end
 end
@@ -59,6 +60,20 @@ function Data:some(x)
   return self._some[x]
 end
 
+--------- --------- -------- ---------- ---------  ---------  
+-- ## Domination
+
+function Data:doms(cols)
+  for _,row in pairs(self.rows) do
+    row.dom = 0
+    for i = 1,self.samples do
+      if row:dominates( lib.any(self.rows), cols) then
+        row.dom = row.dom + 1 end end end
+end
+
+--------- --------- -------- ---------- ---------  ---------  
+-- ## Distances
+-- ## Distances
 -- Get the `dist` between two rows.
 function Data:dist(r1,r2,cols,   n,d,d0,x,y)
   d,n=0,the.tiny

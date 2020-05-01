@@ -2,6 +2,7 @@ local the = require "the"
 local Row = the.class()
 
 function Row:_init(cells) 
+  self.dom = 0
   self.cells = cells 
 end
   
