@@ -16,7 +16,7 @@ function Data:_init(header)
   self.rows  = {}
   self.cols  = nil
   self._some = lib.cache(function (k)
-                 return  self.cols:some(k) end)
+                           return  self.cols:some(k) end)
   if header then self:header(header) end
 end
 

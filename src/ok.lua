@@ -16,7 +16,7 @@ function nok(t) return true end
 
 function ok(t)
   for s,x in pairs(t) do  
-    io.write("-- test : ".. s) 
+    io.write("-- test : ".. s .. " ") 
     pass = pass + 1
     local t1 = os.clock()
     math.randomseed(1)
