@@ -258,10 +258,10 @@ bashrc() { cat<<-'EOF'
 	ok()  { f="$*"; shift; lua ${f}ok.lua $*; }
 	f()  { $root/gold $1.gold $*; }
 	doc() {
-	    (cd $root
-		pycco -d docs `ls $root/src/*.lua | grep -v ok.lua` )
-   		cd docs
-   		cp $root/etc/pycco.css .
+	    (cd $root/src
+		pycco -d ../docs `ls *.lua | grep -v ok.lua` )
+   		cp $root/etc/pycco.css $root/docs
+   		cd $root/docs
    		for i in *.html; do $root/etc/top $i; done
 	}
 	publish() {
