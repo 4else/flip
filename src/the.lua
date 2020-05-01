@@ -14,6 +14,7 @@ end
 return {
   o    =  o,
   oo   =  (function (t) print(table.concat(t,", ")) end),
+  ooo  =  (function (t) return table.concat(t,", ") end),
   class=  require("ml").class,
   csv  =  "../data/",
   ignore= "?",

@@ -12,8 +12,7 @@ end
 
 function Sym:__tostring()
   return string.format("Sym(%s,%s,%s)", 
-                       self.txt,self.mode, self.most)
-end
+                       self.txt,self.mode, self.most) end
 
 function Sym:mid()  return self.mode end
 function Sym:var()  return self:ent() end
@@ -35,6 +34,17 @@ function Sym:add (x,     seen)
   return x
 end
 
+function Sym:sub (x,     seen,n)
+  if x ~= the.ch.skip then 
+    n = self.counts[x]
+    if n and n > 0 then
+      self.n    = self.n - 1
+      self._ent = nil 
+      self.counts[x] = self.counts[x] - 1 end 
+  end
+  return x
+end
+
 function Sym:ent(    e,p)
   if self._ent == nil then 
     e = 0
@@ -42,9 +52,16 @@ function Sym:ent(    e,p)
       if f > 0 then
         p = f/self.n
         e = e - p* math.log(p,2) end end
-    self._ent = e
+    self._ent = e 
   end
   return self._ent 
+end
+
+function Sym:dist(x,y)
+  if x == the.ch.skip and y == the.ch.skip then
+    return 1
+  else
+    return x==y and 0 or 1 end
 end
 
 return Sym

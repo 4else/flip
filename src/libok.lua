@@ -56,3 +56,9 @@ ok{reject = function(t)
   assert(t[1] == 10)
   assert(t[2] == 20)
 end}
+
+ok{ cache = function (u)
+  u=lib.cache(function(x) print("!!",x); return x/2 end)
+  for i=1,10 do lib.same(u[i]) end
+  for i=1,10 do print("??",u[i]) end
+end}

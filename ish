@@ -259,8 +259,8 @@ bashrc() { cat<<-'EOF'
 	f()  { $root/gold $1.gold $*; }
 	doc() {
 	    (cd $root
-		pycco -d $root/docs `ls $root/src/*.lua | grep -v ok.lua` )
-   		cd $root/docs
+		pycco -d docs `ls $root/src/*.lua | grep -v ok.lua` )
+   		cd docs
    		cp $root/etc/pycco.css .
    		for i in *.html; do $root/etc/top $i; done
 	}

@@ -45,28 +45,12 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
       <div class='octowrap'>
         <a class='octothorpe' href='#section-0'>#</a>
       </div>
-      <hr />
-<p>Showing off Colon mode.
-If you hate @ tags, you can use colons. However, you need to specify colon
-mode explicitly -C or &ndash;colon, or <code>colon=true</code> in the config.ld. Be careful
-not to use a colon followed by a space for any other purpose!</p>
-<p>So the incantation in this case is <code>ldoc -C colon.lua</code>.</p>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span></span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-1'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-1'>#</a>
-      </div>
-      <p>module: lib</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre><span class="kd">local</span> <span class="n">lib</span><span class="o">=</span><span class="p">{}</span>
+      <div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">lib</span><span class="o">=</span><span class="p">{}</span>
 
+<span class="kr">function</span> <span class="nc">lib</span><span class="p">.</span><span class="nf">same</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="kr">return</span> <span class="n">x</span> <span class="kr">end</span>
 
 <span class="kr">function</span> <span class="nc">lib</span><span class="p">.</span><span class="nf">any</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="kr">return</span> <span class="n">l</span><span class="p">[</span><span class="nb">math.random</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">#</span><span class="n">l</span><span class="p">)]</span> <span class="kr">end</span>
 
@@ -127,15 +111,9 @@ not to use a colon followed by a space for any other purpose!</p>
    <span class="kr">return</span> <span class="n">s</span> <span class="o">..</span> <span class="s1">&#39;} &#39;</span>
 <span class="kr">end</span>
 
-<span class="kr">function</span> <span class="nc">lib</span><span class="p">.</span><span class="nf">rogues</span><span class="p">()</span>
-  <span class="kd">local</span> <span class="n">no</span> <span class="o">=</span> <span class="p">{</span><span class="n">jit</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">utf8</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">math</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span>
-            <span class="n">table</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">coroutine</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">bit</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">os</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span>
-            <span class="n">io</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">bit32</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">string</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span>
-            <span class="n">debug</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="nb">_VERSION</span><span class="o">=</span><span class="kc">true</span><span class="p">,</span> <span class="nb">_G</span><span class="o">=</span><span class="kc">true</span> <span class="p">}</span>
-  <span class="kr">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span> <span class="nb">_G</span> <span class="p">)</span> <span class="kr">do</span>
-    <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">~=</span> <span class="s2">&quot;function&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="kr">then</span>
-      <span class="kr">if</span> <span class="n">k</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[^A-Z]&quot;</span><span class="p">)</span> <span class="kr">then</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-- alert: rogue local [&quot;</span><span class="o">..</span><span class="n">k</span><span class="o">..</span><span class="s2">&quot;]&quot;</span><span class="p">)</span> <span class="kr">end</span> <span class="kr">end</span> <span class="kr">end</span>
+<span class="kr">function</span> <span class="nc">lib</span><span class="p">.</span><span class="nf">cache</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="kr">return</span> <span class="nb">setmetatable</span><span class="p">({},</span> <span class="p">{</span>
+    <span class="n">__index</span><span class="o">=</span><span class="kr">function</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">);</span><span class="kr">return</span> <span class="n">t</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="kr">end</span><span class="p">})</span>
 <span class="kr">end</span>
 
 <span class="kr">return</span> <span class="n">lib</span>

@@ -9,3 +9,18 @@ ok {sd1 = function (m)
   assert(m.mu == 7)
   assert(3.06 < m.sd and m.sd < 3.061)
 end} 
+
+ok { step = function (   n,t,v)
+  t,v = {},{}
+  n   = Num()
+  math.randomseed(1)
+  for i = 1,100 do t[#t+1] = math.random() end
+  for i = 1,100 do
+    n:add( t[i] )
+    v[i] = n:var()
+  end
+  for i = 100,1,-1 do
+    near( v[i],  n:var() )
+    n:sub( t[i] )
+  end
+end}

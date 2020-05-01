@@ -1,4 +1,4 @@
-local pass,fail,seed = 0,0,1
+local pass,fail,seed,tiny = 0,0,1,0.00001
 
 local function rogues()
   local no = {the=true,
@@ -25,7 +25,7 @@ function ok(t)
     print(string.format (" : %8.6f secs", t2-t1))
     if not passed then   
       fail = fail + 1
-      print("Failure: ".. err) end 
+      print("Failure: ".. err .. pass/(pass+fail+tiny)) end 
   end 
   rogues()
 end
@@ -34,5 +34,3 @@ function near(x,y,z)
   z= z or 0.01
   assert(math.abs(x - y) <= z)
 end
-
-

@@ -48,8 +48,8 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span></span><span class="nb">require</span> <span class="s2">&quot;flip&quot;</span>
-<span class="kd">local</span> <span class="n">Num</span><span class="o">=</span><span class="n">class</span><span class="p">(</span><span class="nb">require</span> <span class="s2">&quot;col&quot;</span><span class="p">)</span>
+      <div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">the</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;the&quot;</span>
+<span class="kd">local</span> <span class="n">Num</span> <span class="o">=</span> <span class="n">the</span><span class="p">.</span><span class="n">class</span><span class="p">(</span><span class="nb">require</span> <span class="s2">&quot;col&quot;</span><span class="p">)</span>
 
 <span class="kr">function</span> <span class="nc">Num</span><span class="p">:</span><span class="nf">_init</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span>
   <span class="n">self</span><span class="p">:</span><span class="n">super</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span>
@@ -68,17 +68,28 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
   <span class="kr">return</span> <span class="nb">string.format</span><span class="p">(</span><span class="s2">&quot;Num(%s,%s)&quot;</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">sd</span><span class="p">)</span>
 <span class="kr">end</span>
 
-
-<span class="kr">function</span> <span class="nc">Num</span><span class="p">:</span><span class="nf">add</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="kr">function</span> <span class="nc">Num</span><span class="p">:</span><span class="nf">add</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span>    <span class="n">d</span><span class="p">)</span>
   <span class="kr">if</span> <span class="n">x</span> <span class="o">~=</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span> 
     <span class="n">self</span><span class="p">.</span><span class="n">n</span>  <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">x</span>       <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="kd">local</span> <span class="n">d</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span>
+    <span class="n">d</span>       <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span>
     <span class="n">self</span><span class="p">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span> <span class="o">+</span> <span class="n">d</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span>
     <span class="n">self</span><span class="p">.</span><span class="n">m2</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">m2</span> <span class="o">+</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span><span class="p">)</span> 
-    <span class="n">self</span><span class="p">.</span><span class="n">sd</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">sd0</span><span class="p">()</span>
     <span class="n">self</span><span class="p">.</span><span class="n">lo</span> <span class="o">=</span> <span class="nb">math.min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">lo</span><span class="p">)</span>
     <span class="n">self</span><span class="p">.</span><span class="n">hi</span> <span class="o">=</span> <span class="nb">math.max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">hi</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">sd</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">sd0</span><span class="p">()</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">x</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nc">Num</span><span class="p">:</span><span class="nf">sub</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span>     <span class="n">d</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="n">x</span> <span class="o">~=</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span> 
+    <span class="n">self</span><span class="p">.</span><span class="n">n</span>  <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">x</span>       <span class="o">=</span> <span class="nb">tonumber</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">d</span>       <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">mu</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span> <span class="o">-</span> <span class="n">d</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">n</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">m2</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">m2</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">mu</span><span class="p">)</span> 
+    <span class="n">self</span><span class="p">.</span><span class="n">sd</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">sd0</span><span class="p">()</span>
   <span class="kr">end</span>
   <span class="kr">return</span> <span class="n">x</span>
 <span class="kr">end</span>
@@ -89,8 +100,26 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
   <span class="kr">return</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">m2</span> <span class="o">/</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span><span class="o">^</span><span class="mf">0.5</span> 
 <span class="kr">end</span>
 
+<span class="kr">function</span> <span class="nc">Num</span><span class="p">:</span><span class="nf">dist</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+  <span class="kr">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span>
+    <span class="kr">return</span> <span class="mi">1</span>
+  <span class="kr">elseif</span> <span class="n">x</span> <span class="o">==</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="ow">and</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">0</span>
+  <span class="kr">elseif</span> <span class="n">y</span> <span class="o">==</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span> 
+    <span class="n">x</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="ow">and</span> <span class="mi">1</span> <span class="ow">or</span> <span class="mi">0</span>
+  <span class="kr">else</span> 
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">self</span><span class="p">:</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">self</span><span class="p">:</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="nb">math.abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span>
+<span class="kr">end</span>
+
 <span class="kr">function</span> <span class="nc">Num</span><span class="p">:</span><span class="nf">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
- 
+  <span class="kr">if</span> <span class="n">x</span> <span class="o">~=</span> <span class="n">the</span><span class="p">.</span><span class="n">ch</span><span class="p">.</span><span class="n">skip</span> <span class="kr">then</span>
+    <span class="n">x</span><span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">lo</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">hi</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">lo</span> <span class="o">+</span> <span class="n">the</span><span class="p">.</span><span class="n">tiny</span><span class="p">)</span>
+  <span class="kr">end</span>
+  <span class="kr">return</span> <span class="n">x</span>
 <span class="kr">end</span>
 
 <span class="kr">return</span> <span class="n">Num</span>

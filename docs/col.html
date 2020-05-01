@@ -45,13 +45,11 @@ d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,7
       <div class='octowrap'>
         <a class='octothorpe' href='#section-0'>#</a>
       </div>
-      <hr />
-<p>module: Col</p>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span></span><span class="nb">require</span> <span class="s2">&quot;flip&quot;</span>
-
-<span class="kd">local</span> <span class="n">Col</span> <span class="o">=</span> <span class="n">class</span><span class="p">()</span>
+      <div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">the</span> <span class="o">=</span> <span class="nb">require</span> <span class="s2">&quot;the&quot;</span>
+<span class="kd">local</span> <span class="n">Col</span> <span class="o">=</span> <span class="n">the</span><span class="p">.</span><span class="n">class</span><span class="p">()</span>
 
 <span class="kr">function</span> <span class="nc">Col</span><span class="p">:</span><span class="nf">_init</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span><span class="n">pos</span><span class="p">)</span>
   <span class="n">self</span><span class="p">.</span><span class="n">txt</span> <span class="o">=</span> <span class="n">txt</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>

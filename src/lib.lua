@@ -1,5 +1,7 @@
 local lib={}
 
+function lib.same(x) return x end
+
 function lib.any(l) return l[math.random(1,#l)] end
 
 function lib.map(t,f, out)
@@ -57,6 +59,11 @@ function lib.dump(t)
      s = s ..k..' = ' .. lib.dump(v) .. ','
    end
    return s .. '} '
+end
+
+function lib.cache(f)
+  return setmetatable({}, {
+    __index=function(t,k) t[k]=f(k);return t[k] end})
 end
 
 return lib
