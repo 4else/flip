@@ -68,7 +68,7 @@ function Data:doms(cols)
     row.dom = 0
     for i = 1,self.samples do
       if row:dominates( lib.any(self.rows), cols) then
-        row.dom = row.dom + 1 end end end
+        row.dom = row.dom + 1/self.samples end end end
 end
 
 --------- --------- -------- ---------- ---------  ---------  
