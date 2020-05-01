@@ -46,7 +46,7 @@ ok{rpad=function()
 ok{split=function(t)
   t = lib.split("10,20,30,40")
   assert(t[1]  == "10")
-  assert(t[#t] == "40") 
+  assert(t[#t] == "40")
   assert(#t == 4) 
 end}
 
