@@ -1,15 +1,4 @@
-----------------------
--- Showing off Colon mode.
--- If you hate @ tags, you can use colons. However, you need to specify colon
--- mode explicitly -C or --colon, or `colon=true` in the config.ld. Be careful
--- not to use a colon followed by a space for any other purpose!
---
--- So the incantation in this case is `ldoc -C colon.lua`.
-
--- module: lib
-
 local lib={}
-
 
 function lib.any(l) return l[math.random(1,#l)] end
 
@@ -68,17 +57,6 @@ function lib.dump(t)
      s = s ..k..' = ' .. lib.dump(v) .. ','
    end
    return s .. '} '
-end
-
-function lib.rogues()
-  local no = {jit=true, utf8=true, math=true, package=true,
-            table=true, coroutine=true, bit=true, os=true,
-            io=true, bit32=true, string=true, arg=true,
-            debug=true, _VERSION=true, _G=true }
-  for k,v in pairs( _G ) do
-    if type(v) ~= "function" and not no[k] then
-      if k:match("^[^A-Z]") then
-        print("-- alert: rogue local ["..k.."]") end end end
 end
 
 return lib

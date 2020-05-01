@@ -1,4 +1,4 @@
-require "flip"
+require "ok"
 
 local lib = require "lib"
 

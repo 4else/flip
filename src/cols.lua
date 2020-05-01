@@ -1,8 +1,8 @@
-require "flip"
+local the  = require "the"
 local lib  = require("lib")
 local Num  = require("num")
 local Sym  = require("sym")
-local Cols = class()
+local Cols = the.class()
 
 -- `Cols` is a place to store summaries 
 -- of `Num`s or `Sym` columns.

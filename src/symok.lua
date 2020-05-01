@@ -1,4 +1,5 @@
-require "sym"
+require "ok"
+
 local Sym=require("sym")
 
 ok {ent1 = function (m)

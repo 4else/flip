@@ -1,9 +1,5 @@
-------------
--- module: Col
-
-require "flip"
-
-local Col = class()
+local the = require "the"
+local Col = the.class()
 
 function Col:_init(txt,pos)
   self.txt = txt or ""

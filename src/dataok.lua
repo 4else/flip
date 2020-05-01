@@ -1,4 +1,6 @@
-require "flip"
+local the = require "the"
+require "ok"
+
 Data=require "data"
 
 ok{some = function (  r,t)

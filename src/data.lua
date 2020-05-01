@@ -1,9 +1,10 @@
-require "flip"
+local the = require "the"
+
 local lib  = require "lib"
 local csv  = require "csv"
 local Row  = require "row"
 local Cols = require "cols"
-local Data = class()
+local Data = the.class()
 
 -- `Data` stores `rows` as well as `cols` that summarize the
 -- columns of that rows.

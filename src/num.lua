@@ -1,5 +1,5 @@
-require "flip"
-local Num=class(require "col")
+local the = require "the"
+local Num = the.class(require "col")
 
 function Num:_init(txt,pos)
   self:super(txt,pos)
@@ -17,7 +17,6 @@ function Num:show() return (w<0 and"<"or">")..self:mid() end
 function Num:__tostring()
   return string.format("Num(%s,%s)", self.mu, self.sd)
 end
-
 
 function Num:add (x)
   if x ~= the.ch.skip then 
@@ -40,7 +39,10 @@ function Num:sd0()
 end
 
 function Num:norm(x)
- 
+  if x ~= the.ch.skip then
+    x= (x - self.lo) / (self.hi - self.lo + the.tiny)
+  end
+  return x
 end
 
 return Num

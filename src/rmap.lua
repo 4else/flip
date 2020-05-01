@@ -1,6 +1,6 @@
-require "lua"
+local the  = require "the"
 local Data = require "data"
-local Rmap = class()
+local Rmap = the.class()
 
 function Rmap:_init(data,opts)
   self.samples = opts.samples or the.data.samples

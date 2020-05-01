@@ -1,5 +1,5 @@
-require "flip"
-local Sym=class(require "col")
+local the = require "the"
+local Sym = the.class(require "col")
 
 function Sym:_init(txt,pos)
   self:super(txt,pos)

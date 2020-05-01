@@ -1,6 +1,5 @@
-require "flip"
-
-local Row = class()
+local the = require "the"
+local Row = the.class()
 
 function Row:_init(cells) 
   self.cells = cells 
