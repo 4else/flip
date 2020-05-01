@@ -12,7 +12,7 @@ ok{some = function (  d,t)
   assert( t[#t].txt == "wind" )
 end}
 
-ok{dist = function(     d,t,close,far,d1,d2)
+ok{dist = function(     d,close,far,d1,d2)
   d = Data()
   d:read(the.csv .. 'weather4.csv')
   for _,row1 in pairs(d.rows) do

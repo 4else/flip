@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>the.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+<script 
+ src="https://kit.fontawesome.com/7abee6b155.js" 
+ crossorigin="anonymous"></script>
+<script 
+ src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script 
+ id=MathJax-script async 
+ src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+<a href="https://your-url" class="github-corner" 
+aria-label="View source on GitHub"><svg 
+width="80" height="80" viewBox="0 0 250 250" 
+style="fill:#CC0000; color:#fff; position: absolute; top: 0; border: 0; left: 0; transform: scale(-1, 1);" i
+aria-hidden="true"><path i
+d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path i
+d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <div class='docs'><h1>&nbsp;DUO: the.lua</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+<a href="index.html">home</a> :: 
+<a href="https://github.com/duo101/flip/blob/master/INSTALL.md">install</a> :: 
+<a href="https://github.com/duo101/flip/blob/master/INSTALL.md">docs</a> :: 
+<a href="https://github.com/duo101/flip/blob/master/CONTRIBUTING.md">contrib</a> :: 
+<a href="https://github.com/duo101/flip/issues">issues</a>   ::
+<a href="https://github.com/duo101/flip/blob/master/LICENSE.md">&copy; 2020</a>  
+<br><br><a href="https://www.lua.org"><img 
+      src=https://img.shields.io/badge/language-lua-orange></a>
+<img  src=https://img.shields.io/badge/purpose-teach,ai,se-blueviolet> 
+<img  src=https://img.shields.io/badge/platform-mac,*nux-informational> 
+<a    href="https://travis-ci.org/timm/lua"><img 
+      src=https://travis-ci.org/timm/lua.svg?branch=master></a>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kd">local</span> <span class="kr">function</span> <span class="nf">o</span><span class="p">(</span><span class="n">t</span><span class="p">,</span>    <span class="n">indent</span><span class="p">,</span><span class="n">fmt</span><span class="p">)</span>
+  <span class="n">indent</span> <span class="o">=</span> <span class="n">indent</span> <span class="ow">or</span> <span class="mi">0</span>
+  <span class="kr">if</span> <span class="n">indent</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="kr">then</span>
+    <span class="kr">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="kr">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">do</span>
+      <span class="kr">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">==</span><span class="s1">&#39;string&#39;</span> <span class="ow">and</span> <span class="n">k</span><span class="p">:</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^_&quot;</span><span class="p">))</span> <span class="kr">then</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="nb">string.rep</span><span class="p">(</span><span class="s2">&quot;|  &quot;</span><span class="p">,</span> <span class="n">indent</span><span class="p">)</span> <span class="o">..</span> <span class="n">k</span> <span class="o">..</span> <span class="s2">&quot;: &quot;</span>
+        <span class="kr">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span> <span class="kr">then</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+          <span class="n">o</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">indent</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="kr">else</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">fmt</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="kr">end</span> <span class="kr">end</span> <span class="kr">end</span> <span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="kr">return</span> <span class="p">{</span>
+  <span class="n">o</span>    <span class="o">=</span>  <span class="n">o</span><span class="p">,</span>
+  <span class="n">oo</span>   <span class="o">=</span>  <span class="p">(</span><span class="kr">function</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="nb">print</span><span class="p">(</span><span class="nb">table.concat</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="p">))</span> <span class="kr">end</span><span class="p">),</span>
+  <span class="n">ooo</span>  <span class="o">=</span>  <span class="p">(</span><span class="kr">function</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="kr">return</span> <span class="nb">table.concat</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="p">)</span> <span class="kr">end</span><span class="p">),</span>
+  <span class="n">class</span><span class="o">=</span>  <span class="nb">require</span><span class="p">(</span><span class="s2">&quot;ml&quot;</span><span class="p">).</span><span class="n">class</span><span class="p">,</span>
+  <span class="n">csv</span>  <span class="o">=</span>  <span class="s2">&quot;../data/&quot;</span><span class="p">,</span>
+  <span class="n">ignore</span><span class="o">=</span> <span class="s2">&quot;?&quot;</span><span class="p">,</span>
+  <span class="n">sep</span><span class="o">=</span>    <span class="s2">&quot;,&quot;</span><span class="p">,</span>
+  <span class="n">tiny</span><span class="o">=</span>   <span class="mi">1</span><span class="o">/</span><span class="nb">math.maxinteger</span><span class="p">,</span>
+  <span class="n">data</span> <span class="o">=</span>  <span class="p">{</span> <span class="n">p</span>      <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+             <span class="n">sample</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
+             <span class="n">data</span>   <span class="o">=</span> <span class="mf">.5</span><span class="p">,</span>
+             <span class="n">far</span>    <span class="o">=</span> <span class="mf">.9</span><span class="p">},</span>
+  <span class="n">rand</span><span class="o">=</span>   <span class="p">{</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">},</span> 
+  <span class="n">ok</span><span class="o">=</span>     <span class="p">{</span> <span class="n">pass</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> 
+            <span class="n">fail</span><span class="o">=</span> <span class="mi">0</span><span class="p">},</span>
+  <span class="n">ch</span><span class="o">=</span>     <span class="p">{</span> <span class="n">klass</span><span class="o">=</span> <span class="s2">&quot;!&quot;</span><span class="p">,</span>
+            <span class="n">less</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">,</span>
+            <span class="n">more</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">,</span>
+            <span class="n">skip</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span><span class="p">,</span>
+            <span class="n">num</span>  <span class="o">=</span> <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+            <span class="n">sym</span>  <span class="o">=</span> <span class="s2">&quot;:&quot;</span>
+          <span class="p">},</span>
+  <span class="n">sample</span><span class="o">=</span> <span class="p">{</span> <span class="n">b</span>      <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+            <span class="n">most</span>   <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
+            <span class="n">epsilon</span><span class="o">=</span> <span class="mf">1.01</span><span class="p">,</span>
+            <span class="n">fmtstr</span> <span class="o">=</span> <span class="s2">&quot;%20s&quot;</span><span class="p">,</span>
+            <span class="n">fmtnum</span> <span class="o">=</span> <span class="s2">&quot;%5.3f&quot;</span><span class="p">,</span>
+            <span class="n">cliffs</span> <span class="o">=</span> <span class="mf">.147</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>cliff&rsquo;s small,medium,large = .147,.33,.474</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="p">},</span>
+  <span class="n">nb</span> <span class="o">=</span>    <span class="p">{</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">m</span><span class="o">=</span><span class="mi">2</span><span class="p">},</span>
+  <span class="n">chop</span><span class="o">=</span>   <span class="p">{</span> <span class="n">m</span> <span class="o">=</span> <span class="mf">.5</span><span class="p">,</span>
+            <span class="n">cohen</span> <span class="o">=</span> <span class="mf">.2</span><span class="p">},</span>
+  <span class="n">num</span><span class="o">=</span>    <span class="p">{</span> <span class="n">conf</span>  <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+            <span class="n">small</span> <span class="o">=</span> <span class="mf">.38</span><span class="p">,</span> <span class="c1">-- small,medium = 0.38,1</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> 
+            <span class="n">last</span>  <span class="o">=</span> <span class="mi">96</span><span class="p">,</span>
+            <span class="n">criticals</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">-- Critical values for ttest</span>
+              <span class="p">[</span><span class="mi">95</span><span class="p">]</span> <span class="o">=</span> <span class="p">{[</span> <span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="mf">3.182</span><span class="p">,[</span> <span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mf">2.447</span><span class="p">,[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="mf">2.179</span><span class="p">,</span>
+                      <span class="p">[</span><span class="mi">24</span><span class="p">]</span><span class="o">=</span><span class="mf">2.064</span><span class="p">,[</span><span class="mi">48</span><span class="p">]</span><span class="o">=</span><span class="mf">2.011</span><span class="p">,[</span><span class="mi">96</span><span class="p">]</span><span class="o">=</span><span class="mf">1.985</span><span class="p">},</span>
+              <span class="p">[</span><span class="mi">99</span><span class="p">]</span> <span class="o">=</span> <span class="p">{[</span> <span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="mf">5.841</span><span class="p">,[</span> <span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="mf">3.707</span><span class="p">,[</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="mf">3.055</span><span class="p">,</span>
+                      <span class="p">[</span><span class="mi">24</span><span class="p">]</span><span class="o">=</span><span class="mf">2.797</span><span class="p">,[</span><span class="mi">48</span><span class="p">]</span><span class="o">=</span><span class="mf">2.682</span><span class="p">,[</span><span class="mi">96</span><span class="p">]</span><span class="o">=</span><span class="mf">2.625</span><span class="p">}}}</span>
+<span class="p">}</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
