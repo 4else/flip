@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 command_not_found_handle () {
+  if [ ! -f "here" ]; then
+    # nothing to do here
+    echo "$@: command missing"
+    return 1
+  fi
   if [ -f "${1}ok.lua" ]; then 
     # run the unit tests in $1ok.lua
     c=$1; 
