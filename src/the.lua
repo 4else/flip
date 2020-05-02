@@ -22,7 +22,7 @@ return {
   tiny=   1/math.maxinteger,
   fmap=   { n   = 128,
             far =   0.9
-          }
+          },
   data =  { p      = 2,
              sample = 128,
              data   = .5,

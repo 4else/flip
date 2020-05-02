@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+command_not_found_handle () {
+  if [ -f "${1}ok.lua" ]; then 
+    # run the unit tests in $1ok.lua
+    c=$1; 
+    shift; 
+    lua ${c}ok.lua $@
+  elif [ -f "$1.lua" ]; then
+    # run the main file $1ok.lua
+    c=$1
+    shift
+     lua $c.lua $@
+  else
+    # else print the usual complaint
+    echo "$@: command missing"
+    return 1
+  fi
+}
