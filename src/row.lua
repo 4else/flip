@@ -3,6 +3,7 @@ local Row = the.class()
 
 function Row:_init(cells) 
   self.dom = 0
+  self.best = false
   self.cells = cells 
 end
   

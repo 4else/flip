@@ -4,6 +4,12 @@ function lib.same(x) return x end
 
 function lib.any(l) return l[math.random(1,#l)] end
 
+function lib.anys(l,n,    t) 
+  t,n = {}, n or 128
+  for i=1,n do t[#t+1] = lib.any(l) end
+  return t
+end
+
 function lib.map(t,f, out)
   out={}
   f =  f and f or function(z) return z end

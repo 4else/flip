@@ -1,5 +1,4 @@
 local the = require "the"
-
 local lib  = require "lib"
 local csv  = require "csv"
 local Row  = require "row"
@@ -99,6 +98,11 @@ end
 function Data:near(r1,cols, rows,   f)
   f= (function (r2) return {dist= self:dist(r1,r2), row=r2} end)
   return lib.sort( lib.map(rows,f), "dist")
+end
+
+function Data:far(r1,cols,rows,f,   f)
+  t= self:near(row, cols, self.rows)
+  return t[ math.floor(#t*f) ].row
 end
 
   
