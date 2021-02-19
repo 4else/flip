@@ -14,7 +14,7 @@ Tim Menzies
 # Silon
 
 
-Cluster + contrast + dominate + optimize 
+Cluster + contrast + dominate + optimize    
 
 
 The more you have, the more you are occupied. The less you have, the more free you are.  
